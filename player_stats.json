@@ -1,5 +1,16 @@
 {
     "name": "R3ZV",
     "honey": 120,
-    "pollen": 120
+    "backpack_capacity": 100,
+    "pollen": 100,
+    "backpack_upgrades": 0,
+    "collect_amount_upgrades": 0,
+    "honey_per_pollen_upgrades": 0,
+    "bees": [
+        {
+            "type": 0,
+            "color_multiplier": 4,
+            "honey_per_pollen": 4
+        }
+    ]
 }

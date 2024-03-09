@@ -5,26 +5,70 @@
 #include <string>
 #include "nlohmann/json.hpp"
 
-enum BeeType {
+enum Color {
     Red,
     Blue,
     White
 };
 
 class Bee {
-    std::string name;
-    BeeType type;
+    const Color type;
+
+    /// a percentage of how much
+    /// extra pollen a bee should give
+    /// for flowers of the same color
+    const uint8_t color_multiplier;
+
+    /// a percentage of how much
+    /// extra honey the player will receive
+    /// after selling his pollen
+    const uint8_t honey_per_pollen;
+
+    friend std::ostream &operator<<(std::ostream &out, const Bee &bee) {
+        out << "Bee has type: " << bee.type << std::endl;
+        out << "Bee has a color multiplier of: " << bee.color_multiplier << "%" << std::endl;
+        out << "Bee has honey_per_pollen multiplier of: " << bee.honey_per_pollen << "%" << std::endl;
+        return out;
+    }
+public:
+    Bee(Color bee_type, uint8_t bee_color_multiplier, uint8_t bee_honey_per_pollen) :
+        type(bee_type),
+        color_multiplier(bee_color_multiplier),
+        honey_per_pollen(bee_honey_per_pollen) {}
+
 };
 
 class Player {
     const std::string name;
-    uint64_t honey;
-    uint64_t pollen;
 
-    Player(std::string player_name, uint64_t player_honey, uint64_t player_pollen) :
+    uint32_t honey;
+    uint32_t backpack_capacity;
+    uint32_t pollen;
+
+    uint8_t backpack_upgrades;
+    uint8_t collect_amount_upgrades;
+    uint8_t honey_per_pollen_upgrades;
+
+    std::vector<Bee> bees;
+
+    Player(
+        std::string player_name,
+        uint32_t player_honey,
+        uint32_t player_backpack_capacity,
+        uint32_t player_pollen,
+        uint8_t player_backpack_upgrades,
+        uint8_t player_collect_amount_upgrades,
+        uint8_t player_honey_per_pollen_upgrades,
+        std::vector<Bee> player_bees
+    ) :
         name(player_name),
         honey(player_honey),
-        pollen(player_pollen)
+        backpack_capacity(player_backpack_capacity),
+        pollen(player_pollen),
+        backpack_upgrades(player_backpack_upgrades),
+        collect_amount_upgrades(player_collect_amount_upgrades),
+        honey_per_pollen_upgrades(player_honey_per_pollen_upgrades),
+        bees(player_bees)
     {}
 
     /// save_player_stats saves the player information inside a
@@ -55,22 +99,60 @@ public:
         file.close();
 
         std::string name = stats["name"];
-        uint64_t honey = stats["honey"];
-        uint64_t pollen = stats["pollen"];
+        uint32_t honey = stats["honey"];
+        uint32_t backpack_capacity = stats["backpack_capacity"];
+        uint32_t pollen = stats["pollen"];
 
-        return Player(name, honey, pollen);
+        uint32_t backpack_upgrades = stats["backpack_upgrades"];
+        assert(backpack_upgrades == 0);
+
+        uint32_t collect_amount_upgrades = stats["collect_amount_upgrades"];
+        assert(collect_amount_upgrades == 0);
+
+        uint32_t honey_per_pollen_upgrades = stats["honey_per_pollen_upgrades"];
+        assert(honey_per_pollen_upgrades == 0);
+
+        std::vector<Bee> bees;
+        for (auto bee_stats : stats["bees"]) {
+            Color type = bee_stats["type"];
+            uint8_t color_multiplier = bee_stats["color_multiplier"];
+            uint8_t honey_per_pollen = bee_stats["honey_per_pollen"];
+            bees.push_back(Bee(type, color_multiplier, honey_per_pollen));
+        }
+
+        return Player(
+                   name,
+                   honey,
+                   backpack_capacity,
+                   pollen,
+                   backpack_upgrades,
+                   collect_amount_upgrades,
+                   honey_per_pollen_upgrades,
+                   bees
+               );
     }
 
-    void debug() {
-        std::cout << "PLAYER INFO:" << std::endl;
-        std::cout << "Player name: " << name << std::endl;
-        std::cout << "Player honey: " << honey << std::endl;
-        std::cout << "Player pollen: " << pollen << std::endl;
+    friend std::ostream &operator<<(std::ostream &out, const Player &player) {
+        out << "Player's name: " << player.name << std::endl;
+        out << "Player's honey: " << player.honey << std::endl;
+        out << "Player's backpack capacity: " << player.backpack_capacity << std::endl;
+        out << "Player's pollen: " << player.pollen << std::endl;
+
+        out << "The player has: {" << player.backpack_upgrades << "} backpack upgrades"<< std::endl;
+        out << "The player has: {" << player.collect_amount_upgrades << "} collect amount upgrades"<< std::endl;
+        out << "The player has: {" << player.honey_per_pollen_upgrades << "} honey per pollen upgrades"<< std::endl;
+
+        out << "The player has the following bees:\n";
+
+        for (Bee bee : player.bees) {
+            std::cout << bee << std::endl;
+        }
+        return out;
     }
 };
 
 int main() {
     Player player = Player::load_player_stats();
-    player.debug();
+    std::cout << player;
     return 0;
 }
