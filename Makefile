@@ -1,25 +1,30 @@
-# Compiler
-CXX = g++
-# Compiler flags
-CXXFLAGS = -Wall -Wextra -std=c++11
-# Source files
-SRCS = main.cpp
-# Object files
-OBJS = $(SRCS:.cpp=.o)
-# Executable name
-EXEC = program
+FLAGS = -std=c++11 -Wall -Wextra
 
-# Default target
-all: $(EXEC)
+# Directories
+SRCDIR = src
+BINDIR = bin
+BLDDIR = build
+TARGET = main
 
-# Rule to compile .cpp files into .o files
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+$(TARGET): $(BLDDIR)/main.o $(BLDDIR)/bee.o $(BLDDIR)/player.o
+	@mkdir -p $(BINDIR)
+	g++ $(FLAGS) $(BLDDIR)/main.o $(BLDDIR)/player.o $(BLDDIR)/bee.o -o $(BINDIR)/${TARGET}
 
-# Rule to link object files into the executable
-$(EXEC): $(OBJS)
-	$(CXX) $(OBJS) -o $(EXEC)
+$(BLDDIR)/main.o: $(SRCDIR)/main.cpp
+	@mkdir -p $(BLDDIR)
+	g++ $(FLAGS) -c $(SRCDIR)/main.cpp -o $(BLDDIR)/main.o
 
-# Clean up
+$(BLDDIR)/bee.o: $(SRCDIR)/bee.cpp
+	@mkdir -p $(BLDDIR)
+	g++ $(FLAGS) -c $(SRCDIR)/bee.cpp -o $(BLDDIR)/bee.o
+
+$(BLDDIR)/player.o: $(SRCDIR)/player.cpp
+	@mkdir -p $(BLDDIR)
+	g++ $(FLAGS) -c $(SRCDIR)/player.cpp -o $(BLDDIR)/player.o
+
 clean:
-	rm -f $(OBJS) $(EXEC)
+	rm -r $(BINDIR)
+	rm -r $(BLDDIR)
+
+run:
+	$(BINDIR)/$(TARGET)

@@ -1,6 +1,11 @@
-# The Project
-This is a terminal based game about Bees inspired by the Roblox game
-[Bee Swarm Simulator](https://www.roblox.com/games/1537690962/Bee-Swarm-Simulator)
+# Inspiration
+This games' design / art style is inspired by [Bee Swarm Simulator](https://www.roblox.com/games/1537690962/Bee-Swarm-Simulator)
+and the gameplay from [Cookie Clicker](https://orteil.dashnet.org/cookieclicker/)
+
+# Gameplay
+In this game you are bee keeper and you go to various fields to 
+collect pollen with the help of your bees in order to make honey so
+you can get more bees and upgrade your backpack and your pollen collector.
 
 # Requirements
 - G++ 11
