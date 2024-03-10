@@ -6,21 +6,16 @@ BINDIR = bin
 BLDDIR = build
 TARGET = main
 
-$(TARGET): $(BLDDIR)/main.o $(BLDDIR)/bee.o $(BLDDIR)/player.o
+SRCS = $(shell find $(SRCDIR) -name "*.cpp")
+OBJS = $(patsubst $(SRCDIR)/%.cpp,$(BLDDIR)/%.o, $(SRCS))
+
+$(BINDIR)/$(TARGET): $(OBJS)
 	@mkdir -p $(BINDIR)
-	g++ $(FLAGS) $(BLDDIR)/main.o $(BLDDIR)/player.o $(BLDDIR)/bee.o -o $(BINDIR)/${TARGET}
+	g++ $(FLAGS) $^ -o $@
 
-$(BLDDIR)/main.o: $(SRCDIR)/main.cpp
-	@mkdir -p $(BLDDIR)
-	g++ $(FLAGS) -c $(SRCDIR)/main.cpp -o $(BLDDIR)/main.o
-
-$(BLDDIR)/bee.o: $(SRCDIR)/bee.cpp
-	@mkdir -p $(BLDDIR)
-	g++ $(FLAGS) -c $(SRCDIR)/bee.cpp -o $(BLDDIR)/bee.o
-
-$(BLDDIR)/player.o: $(SRCDIR)/player.cpp
-	@mkdir -p $(BLDDIR)
-	g++ $(FLAGS) -c $(SRCDIR)/player.cpp -o $(BLDDIR)/player.o
+$(BLDDIR)/%.o: $(SRCDIR)/%.cpp $(SRCDIR)
+	@mkdir -p $(dir $@)
+	g++ $(FLAGS) -c $< -o $@
 
 clean:
 	rm -r $(BINDIR)
