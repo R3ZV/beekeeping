@@ -2,18 +2,18 @@ name: CI - Format and Clean
 
 on:
   push:
-    branches: [ main ]  # Change "main" to your branch name if needed
+    branches: [ master ]
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # You can choose a different runner OS
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3  # Checks out your code
 
       - name: Install dependencies
         run: |
-          sudo apt update  # Update package lists
+          sudo apt update
           sudo apt install -y astyle  # Install code formatter
 
       - name: Format C++ code
