@@ -2,8 +2,20 @@ repos:
   - repo: local
     hooks:
       - id: custom-script
-        name: clean-script
-        entry: ./clean.sh
+        name: Clean script
+        entry: ./hooks/clean.sh
+        language: system
+        pass_filenames: false
+        types: [file]
+      - id: custom-script
+        name: Code Format
+        entry: ./hooks/format.sh
+        language: system
+        pass_filenames: false
+        types: [file]
+      - id: custom-script
+        name: Run tests
+        entry: ./hooks/test.sh
         language: system
         pass_filenames: false
         types: [file]
