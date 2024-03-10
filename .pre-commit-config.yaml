@@ -1,0 +1,9 @@
+repos:
+  - repo: local
+    hooks:
+      - id: custom-script
+        name: clean-script
+        entry: ./clean.sh
+        language: system
+        pass_filenames: false
+        types: [file]
