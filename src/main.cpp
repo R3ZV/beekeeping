@@ -1,6 +1,5 @@
-#include <iostream>
-
 #include "player.h"
+#include <iostream>
 
 int main() {
     Player player = Player::load_player_stats();
