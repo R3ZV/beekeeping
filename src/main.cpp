@@ -12,12 +12,23 @@ enum GameState {
     Stats,
 };
 
+class GameTexture {
+    Texture2D background;
+public:
+    GameTexture (Texture2D game_background) : background(game_background) {}
+    Texture2D get_background() {
+        return background;
+    }
+};
+
 class Game {
     GameState state;
     Player player;
+    GameTexture textures;
 
     void game_main_menu() {
         ClearBackground(RAYWHITE);
+        DrawTexture(textures.get_background(), 0, 0, RAYWHITE);
         DrawText("Main Menu", 190, 200, 20, LIGHTGRAY);
         DrawText("Press ENTER to start", 190, 300, 20, LIGHTGRAY);
 
@@ -97,7 +108,11 @@ class Game {
     }
 
 public:
-    Game(GameState initial_state, Player player_instance) : state(initial_state), player(player_instance) {}
+    Game(GameState initial_state, Player player_instance, GameTexture game_textures)
+        :
+        state(initial_state),
+        player(player_instance),
+        textures(game_textures) {}
 
     void draw_state() {
         switch (state) {
@@ -136,7 +151,9 @@ int main() {
     const int HEIGHT = 800;
     InitWindow(WIDTH, HEIGHT, "Bee Keeping");
 
-    Game game = Game(MainMenu, player);
+    Texture2D background = LoadTexture("./assets/background.png");
+    GameTexture textures = GameTexture(background);
+    Game game = Game(MainMenu, player, textures);
     while (!WindowShouldClose()) {
         BeginDrawing();
         game.draw_state();
