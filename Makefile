@@ -1,4 +1,4 @@
-FLAGS = -std=c++11 -Wall -Wextra
+FLAGS = -std=c++11 -Wall -Wextra -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
 # Directories
 SRCDIR = src

@@ -51,7 +51,7 @@ Player Player::load_player_stats() {
 
     std::vector<Bee> bees;
     for (auto bee_stats : stats["bees"]) {
-        Color type = bee_stats["type"];
+        BeeColor type = bee_stats["type"];
         uint16_t color_multiplier = bee_stats["color_multiplier"];
         uint16_t honey_per_pollen = bee_stats["honey_per_pollen"];
         bees.push_back(Bee(type, color_multiplier, honey_per_pollen));

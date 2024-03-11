@@ -23,7 +23,7 @@ std::ostream &operator<<(std::ostream &out, const Bee &bee) {
     return out;
 }
 
-Bee::Bee(Color bee_type, uint16_t bee_color_multiplier,
+Bee::Bee(BeeColor bee_type, uint16_t bee_color_multiplier,
          uint16_t bee_honey_per_pollen)
     : type(bee_type), color_multiplier(bee_color_multiplier),
       honey_per_pollen(bee_honey_per_pollen) {}

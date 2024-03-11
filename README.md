@@ -10,6 +10,7 @@ you can get more bees and upgrade your backpack and your pollen collector.
 # Requirements
 - G++ 11
 - Make
+- Raylib
 
 This project also uses [nlohmann/json](https://github.com/nlohmann/json)
 for serializing / deserializing json data.
