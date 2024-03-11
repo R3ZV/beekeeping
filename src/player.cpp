@@ -2,9 +2,9 @@
 
 Player::Player(std::string player_name, uint32_t player_honey,
                uint32_t player_backpack_capacity, uint32_t player_pollen,
-               uint8_t player_backpack_upgrades,
-               uint8_t player_collect_amount_upgrades,
-               uint8_t player_honey_per_pollen_upgrades,
+               uint16_t player_backpack_upgrades,
+               uint16_t player_collect_amount_upgrades,
+               uint16_t player_honey_per_pollen_upgrades,
                std::vector<Bee> player_bees)
     : name(player_name), honey(player_honey),
       backpack_capacity(player_backpack_capacity), pollen(player_pollen),
@@ -52,8 +52,8 @@ Player Player::load_player_stats() {
     std::vector<Bee> bees;
     for (auto bee_stats : stats["bees"]) {
         Color type = bee_stats["type"];
-        uint8_t color_multiplier = bee_stats["color_multiplier"];
-        uint8_t honey_per_pollen = bee_stats["honey_per_pollen"];
+        uint16_t color_multiplier = bee_stats["color_multiplier"];
+        uint16_t honey_per_pollen = bee_stats["honey_per_pollen"];
         bees.push_back(Bee(type, color_multiplier, honey_per_pollen));
     }
 
@@ -68,12 +68,12 @@ std::ostream &operator<<(std::ostream &out, const Player &player) {
         << std::endl;
     out << "Player's pollen: " << player.pollen << std::endl;
 
-    out << "The player has: {" << player.backpack_upgrades
-        << "} backpack upgrades" << std::endl;
-    out << "The player has: {" << player.collect_amount_upgrades
-        << "} collect amount upgrades" << std::endl;
-    out << "The player has: {" << player.honey_per_pollen_upgrades
-        << "} honey per pollen upgrades" << std::endl;
+    out << "The player has: " << player.backpack_upgrades << " backpack upgrades"
+        << std::endl;
+    out << "The player has: " << player.collect_amount_upgrades
+        << " collect amount upgrades" << std::endl;
+    out << "The player has: " << player.honey_per_pollen_upgrades
+        << " honey per pollen upgrades" << std::endl;
 
     out << "The player has the following bees:\n";
 
