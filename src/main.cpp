@@ -1,10 +1,12 @@
 #include "raylib.h"
 #include "player.h"
 
+#include <cstring>
 #include <iostream>
 
 #define WIDTH 1024
 #define HEIGHT 800
+
 enum GameState {
     MainMenu,
     Lobby,
@@ -42,6 +44,13 @@ class Game {
         const int NORMAL_FONT_SIZE = 20;
         ClearBackground(BLUE);
         DrawText("LOBBY", WIDTH / 2 - 3 * NORMAL_FONT_SIZE, 100, 2 * NORMAL_FONT_SIZE, RAYWHITE);
+
+        char buffer[50];
+        std::sprintf(buffer, "Pollen: %d / %d", player.get_pollen(), player.get_backpack_capacity());
+        DrawText(buffer, WIDTH - strlen(buffer) * 12, 20, NORMAL_FONT_SIZE, RAYWHITE);
+
+        std::sprintf(buffer, "Honey: %d", player.get_honey());
+        DrawText(buffer, 2 * NORMAL_FONT_SIZE, 20, NORMAL_FONT_SIZE, RAYWHITE);
 
         const int AVERAGE_LETTERS = 12;
         const int GAP = 50;
@@ -103,10 +112,57 @@ class Game {
     }
 
     void game_stats() {
-        const int NORMAL_FONT_SIZE = 20;
         ClearBackground(RED);
-        DrawText("STATS:", WIDTH / 2 - 4 * NORMAL_FONT_SIZE, 100, 2 * NORMAL_FONT_SIZE, RAYWHITE);
-        DrawText("[B]ack", WIDTH / 2 - 3 * NORMAL_FONT_SIZE, HEIGHT - 100, NORMAL_FONT_SIZE, RAYWHITE);
+        const int FONT_SIZE = 20;
+        DrawText("STATS:", WIDTH / 2 - 3 * FONT_SIZE, 30, 2 * FONT_SIZE, RAYWHITE);
+        DrawText("[B]ack", WIDTH / 2 - 3 * FONT_SIZE, HEIGHT - 30, FONT_SIZE, RAYWHITE);
+
+        const int GAP = 24;
+        const int BASE = 100;
+        const int NORMAL_FONT_SIZE = 18;
+        int row = 1;
+
+        DrawText("Total honey: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        row++;
+
+        DrawText("Total bees: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        row++;
+
+        DrawText("Red bees: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        row++;
+
+        DrawText("Blue bees: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        row++;
+
+        DrawText("White bees: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        row++;
+
+        DrawText("Total honey: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        row++;
+
+        DrawText("Red pollen multiplier: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        row++;
+
+        DrawText("Blue pollen multiplier: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        row++;
+
+        DrawText("White pollen multiplier: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        row++;
+
+        DrawText("Honey per pollen: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        row++;
+
+        DrawText("Pollen collection: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        row++;
+
+        DrawText("Backpack upgrades: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        row++;
+
+        DrawText("Tool upgrades: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        row++;
+
+        DrawText("Honey per pollen upgrades: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        row++;
 
         if (IsKeyPressed(KEY_B)) {
             state = GameState::Lobby;
@@ -151,7 +207,7 @@ public:
 };
 
 int main() {
-    Player player = Player::load_player_stats();
+    Player player = Player::load_stats();
     InitWindow(WIDTH, HEIGHT, "Bee Keeping");
 
     Texture2D background = LoadTexture("./assets/background.png");

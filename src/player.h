@@ -12,13 +12,13 @@
 class Player {
     const std::string name;
 
-    uint32_t honey;
-    uint32_t backpack_capacity;
-    uint32_t pollen;
+    int honey;
+    int backpack_capacity;
+    int pollen;
 
-    uint16_t backpack_upgrades;
-    uint16_t collect_amount_upgrades;
-    uint16_t honey_per_pollen_upgrades;
+    short int backpack_upgrades;
+    short int collect_amount_upgrades;
+    short int honey_per_pollen_upgrades;
 
     std::vector<Bee> bees;
 
@@ -29,16 +29,20 @@ class Player {
     friend std::ostream &operator<<(std::ostream &out, const Player &player);
 
 public:
-    Player(std::string player_name, uint32_t player_honey,
-           uint32_t player_backpack_capacity, uint32_t player_pollen,
-           uint16_t player_backpack_upgrades,
-           uint16_t player_collect_amount_upgrades,
-           uint16_t player_honey_per_pollen_upgrades,
+    Player(std::string player_name, int player_honey,
+           int player_backpack_capacity,
+           int player_pollen,
+           short int player_backpack_upgrades,
+           short int player_collect_amount_upgrades,
+           short int player_honey_per_pollen_upgrades,
            std::vector<Bee> player_bees);
 
     /// load_player_stats reads the player_stats.json file
     /// and returns a Player object with its appropriate data
-    static Player load_player_stats();
+    static Player load_stats();
+    int get_pollen();
+    int get_backpack_capacity();
+    int get_honey();
 };
 
 #endif // PLAYER_H
