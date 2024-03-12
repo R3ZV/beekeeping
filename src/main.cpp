@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#define WIDTH 1024
+#define HEIGHT 800
 enum GameState {
     MainMenu,
     Lobby,
@@ -29,8 +31,7 @@ class Game {
     void game_main_menu() {
         ClearBackground(RAYWHITE);
         DrawTexture(textures.get_background(), 0, 0, RAYWHITE);
-        DrawText("Main Menu", 190, 200, 20, LIGHTGRAY);
-        DrawText("Press ENTER to start", 190, 300, 20, LIGHTGRAY);
+        DrawText("Press ENTER", WIDTH / 2 - 120, 300, 30, RAYWHITE);
 
         if (IsKeyPressed(KEY_ENTER)) {
             state = GameState::Lobby;
@@ -38,11 +39,16 @@ class Game {
     }
 
     void game_lobby() {
-        ClearBackground(RAYWHITE);
-        DrawText("This is lobby", 190, 200, 20, LIGHTGRAY);
-        DrawText("Press U to go to the Upgrades", 190, 300, 20, LIGHTGRAY);
-        DrawText("Press S to go to the Stats", 190, 400, 20, LIGHTGRAY);
-        DrawText("Press H to sell pollen", 190, 500, 20, LIGHTGRAY);
+        const int NORMAL_FONT_SIZE = 20;
+        ClearBackground(BLUE);
+        DrawText("LOBBY", WIDTH / 2 - 3 * NORMAL_FONT_SIZE, 100, 2 * NORMAL_FONT_SIZE, RAYWHITE);
+
+        const int AVERAGE_LETTERS = 12;
+        const int GAP = 50;
+        DrawText("[U]pgrades", WIDTH - NORMAL_FONT_SIZE * AVERAGE_LETTERS, HEIGHT - 100 - 4 * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        DrawText("[S]tats", WIDTH - NORMAL_FONT_SIZE * AVERAGE_LETTERS, HEIGHT - 100 - 3 * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        DrawText("Sell [H]oney", WIDTH - NORMAL_FONT_SIZE * AVERAGE_LETTERS, HEIGHT - 100 - 2 * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        DrawText(state == GameState::FieldSelection ? "[B]ack" : "[F]ields", WIDTH - NORMAL_FONT_SIZE * AVERAGE_LETTERS, HEIGHT - 100 - GAP, NORMAL_FONT_SIZE, RAYWHITE);
 
         // TODO:
         // make it so after you press F a flag is turned on and the player
@@ -52,8 +58,6 @@ class Game {
         // Or it can be like Vimium where you press F and for each
         // field a text will appear in the corner denoting what button to press
         // to go to it
-        DrawText("Press F to focus FIELDS", 190, 600, 20, LIGHTGRAY);
-
         if (state == GameState::FieldSelection) {
             // TODO: add overlay for each field with
             // numbers from 1 to 7 to select which field to go to
@@ -87,10 +91,11 @@ class Game {
         }
     }
 
-    void game_shop() {
-        ClearBackground(RAYWHITE);
-        DrawText("This is upgrades", 190, 200, 20, LIGHTGRAY);
-        DrawText("Press B to go back", 190, 300, 20, LIGHTGRAY);
+    void game_upgrades() {
+        const int NORMAL_FONT_SIZE = 20;
+        ClearBackground(ORANGE);
+        DrawText("UPGRADES:", WIDTH / 2 - 5 * NORMAL_FONT_SIZE, 100, 2 * NORMAL_FONT_SIZE, RAYWHITE);
+        DrawText("[B]ack", WIDTH / 2 - 3 * NORMAL_FONT_SIZE, HEIGHT - 100, NORMAL_FONT_SIZE, RAYWHITE);
 
         if (IsKeyPressed(KEY_B)) {
             state = GameState::Lobby;
@@ -98,9 +103,10 @@ class Game {
     }
 
     void game_stats() {
-        ClearBackground(RAYWHITE);
-        DrawText("This is stats", 190, 200, 20, LIGHTGRAY);
-        DrawText("Press B to go back", 190, 300, 20, LIGHTGRAY);
+        const int NORMAL_FONT_SIZE = 20;
+        ClearBackground(RED);
+        DrawText("STATS:", WIDTH / 2 - 4 * NORMAL_FONT_SIZE, 100, 2 * NORMAL_FONT_SIZE, RAYWHITE);
+        DrawText("[B]ack", WIDTH / 2 - 3 * NORMAL_FONT_SIZE, HEIGHT - 100, NORMAL_FONT_SIZE, RAYWHITE);
 
         if (IsKeyPressed(KEY_B)) {
             state = GameState::Lobby;
@@ -112,7 +118,8 @@ public:
         :
         state(initial_state),
         player(player_instance),
-        textures(game_textures) {}
+        textures(game_textures)
+    {}
 
     void draw_state() {
         switch (state) {
@@ -133,7 +140,7 @@ public:
             break;
 
         case Upgrades:
-            game_shop();
+            game_upgrades();
             break;
 
         case Stats:
@@ -145,15 +152,13 @@ public:
 
 int main() {
     Player player = Player::load_player_stats();
-    std::cout << player;
-
-    const int WIDTH = 1024;
-    const int HEIGHT = 800;
     InitWindow(WIDTH, HEIGHT, "Bee Keeping");
 
     Texture2D background = LoadTexture("./assets/background.png");
     GameTexture textures = GameTexture(background);
     Game game = Game(MainMenu, player, textures);
+
+    std::cout << player;
     while (!WindowShouldClose()) {
         BeginDrawing();
         game.draw_state();
