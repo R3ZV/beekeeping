@@ -33,7 +33,8 @@ class Game {
     void game_main_menu() {
         ClearBackground(RAYWHITE);
         DrawTexture(textures.get_background(), 0, 0, RAYWHITE);
-        DrawText("Press ENTER", WIDTH / 2 - 120, 300, 30, RAYWHITE);
+        DrawText("BEE KEEPER", WIDTH / 2 - 275, 5, 90, RAYWHITE);
+        DrawText("Press ENTER", WIDTH / 2 - 120, 100, 30, PINK);
 
         if (IsKeyPressed(KEY_ENTER)) {
             state = GameState::Lobby;
