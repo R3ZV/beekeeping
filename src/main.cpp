@@ -16,6 +16,7 @@ enum GameState {
     Stats,
 };
 
+// TODO: add destructors to unload textures
 class GameTexture {
     Texture2D background;
 public:
@@ -34,7 +35,7 @@ class Game {
         ClearBackground(RAYWHITE);
         DrawTexture(textures.get_background(), 0, 0, RAYWHITE);
         DrawText("BEE KEEPER", WIDTH / 2 - 275, 5, 90, RAYWHITE);
-        DrawText("Press ENTER", WIDTH / 2 - 120, 100, 30, PINK);
+        DrawText("Press ENTER", WIDTH / 2 - 120, 100, 30, DARKGRAY);
 
         if (IsKeyPressed(KEY_ENTER)) {
             state = GameState::Lobby;
@@ -123,45 +124,57 @@ class Game {
         const int NORMAL_FONT_SIZE = 18;
         int row = 1;
 
-        DrawText("Total honey: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        char buffer[50];
+
+        std::sprintf(buffer, "Total honey: %d", player.get_total_honey());
+        DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
         row++;
 
-        DrawText("Total bees: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        std::sprintf(buffer, "Total bees: %d", player.get_total_bees());
+        DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
         row++;
 
-        DrawText("Red bees: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        std::sprintf(buffer, "Red bees: %d", player.get_total_bees_of_type(BeeColor::Red));
+        DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
         row++;
 
-        DrawText("Blue bees: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        std::sprintf(buffer, "Blue bees: %d", player.get_total_bees_of_type(BeeColor::Blue));
+        DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
         row++;
 
-        DrawText("White bees: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        std::sprintf(buffer, "White bees: %d", player.get_total_bees_of_type(BeeColor::White));
+        DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
         row++;
 
-        DrawText("Total honey: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        std::sprintf(buffer, "Red pollen multiplier: %d", player.get_red_pollen_multiplier());
+        DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
         row++;
 
-        DrawText("Red pollen multiplier: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        std::sprintf(buffer, "Blue pollen multiplier: %d", player.get_blue_pollen_multiplier());
+        DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
         row++;
 
-        DrawText("Blue pollen multiplier: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        std::sprintf(buffer, "White pollen multiplier: %d", player.get_blue_pollen_multiplier());
+        DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
         row++;
 
-        DrawText("White pollen multiplier: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        std::sprintf(buffer, "Honey per pollen: %d", player.get_honey_per_pollen());
+        DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
         row++;
 
-        DrawText("Honey per pollen: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        std::sprintf(buffer, "Collect amount: %d", player.get_collect_amount());
+        DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
         row++;
 
-        DrawText("Pollen collection: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        std::sprintf(buffer, "Backpack upgrades: %d", player.get_backpack_upgrades());
+        DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
         row++;
 
-        DrawText("Backpack upgrades: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        std::sprintf(buffer, "Collect amount upgrades: %d", player.get_collect_amount_upgrades());
+        DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
         row++;
 
-        DrawText("Tool upgrades: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
-        row++;
-
+        std::sprintf(buffer, "Honey per pollen upgrades: %d", player.get_honey_per_pollen_upgrades());
         DrawText("Honey per pollen upgrades: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
         row++;
 

@@ -18,3 +18,6 @@ for serializing / deserializing json data.
 Tested on: 
 - OS: Arch Linux x86_64
 - Kernel: 6.7.9-arch1-1
+
+# Refererences
+Background inspired by [Patrick](https://www.artstation.com/blacklunaris)

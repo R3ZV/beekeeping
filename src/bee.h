@@ -16,6 +16,8 @@ class Bee {
 public:
     Bee(BeeColor bee_type, short int bee_color_multiplier,
         short int bee_honey_per_pollen);
+
+    BeeColor get_type();
 };
 
 #endif // BEE_H
