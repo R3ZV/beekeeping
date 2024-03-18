@@ -16,21 +16,32 @@ enum GameState {
     Stats,
 };
 
-// BUG: doesn't unload as expected
-// Perhaps move it to its .h and .cpp file
+// TODO: move it to its .h and .cpp file with Game
 class GameTexture {
     Texture2D background;
+    Texture2D strawberry_icon;
 public:
     GameTexture () {
         background = LoadTexture("./assets/background.png");
+        strawberry_icon = LoadTexture("./assets/strawberry.png");
+    }
+
+    GameTexture (const GameTexture& other) {
+        background = other.background;
+        strawberry_icon = other.strawberry_icon;
     }
 
     ~GameTexture() {
         UnloadTexture(background);
+        UnloadTexture(strawberry_icon);
     }
 
     Texture2D get_background() {
         return background;
+    }
+
+    Texture2D get_strawberry_icon() {
+        return strawberry_icon;
     }
 };
 
@@ -68,6 +79,40 @@ class Game {
         DrawText("[S]tats", WIDTH - NORMAL_FONT_SIZE * AVERAGE_LETTERS, HEIGHT - 100 - 3 * GAP, NORMAL_FONT_SIZE, RAYWHITE);
         DrawText("Sell [H]oney", WIDTH - NORMAL_FONT_SIZE * AVERAGE_LETTERS, HEIGHT - 100 - 2 * GAP, NORMAL_FONT_SIZE, RAYWHITE);
         DrawText(state == GameState::FieldSelection ? "[B]ack" : "[F]ields", WIDTH - NORMAL_FONT_SIZE * AVERAGE_LETTERS, HEIGHT - 100 - GAP, NORMAL_FONT_SIZE, RAYWHITE);
+
+        // display fields
+        // TODO: add tag to each corner
+        const int X_GAP = 116;
+        const int Y_GAP = 80;
+        int field_icon_x = 350;
+        int field_icon_y = 200;
+
+        // First 3
+        DrawTexture(textures.get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
+        field_icon_x += X_GAP;
+
+        DrawTexture(textures.get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
+        field_icon_x += X_GAP;
+
+        DrawTexture(textures.get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
+
+        // Next 3
+        field_icon_y += Y_GAP;
+        field_icon_x = 350;
+
+        DrawTexture(textures.get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
+        field_icon_x += X_GAP;
+
+        DrawTexture(textures.get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
+        field_icon_x += X_GAP;
+
+        DrawTexture(textures.get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
+
+        field_icon_y += Y_GAP;
+        field_icon_x = 350 + X_GAP;
+
+        // Last
+        DrawTexture(textures.get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
 
         // TODO:
         // make it so after you press F a flag is turned on and the player
@@ -178,7 +223,7 @@ class Game {
         row++;
 
         std::sprintf(buffer, "Honey per pollen upgrades: %d", player.get_honey_per_pollen_upgrades());
-        DrawText("Honey per pollen upgrades: []", 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+        DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
         row++;
 
         if (IsKeyPressed(KEY_B)) {
@@ -187,7 +232,7 @@ class Game {
     }
 
 public:
-    Game(GameState initial_state, Player player_instance, GameTexture game_textures)
+    Game(GameState initial_state, Player player_instance, GameTexture &game_textures)
         :
         state(initial_state),
         player(player_instance),
