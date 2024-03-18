@@ -1,4 +1,8 @@
-FLAGS = -std=c++11 -Wall -Wextra -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+CC := g++
+CFLAGS := -std=c++11 -Wall -Wextra
+LDFLAGS := -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+INCLUDES := -I/usr/local/include
+LIBRARIES := -L/usr/local/lib
 
 # Directories
 SRCDIR = src
@@ -11,11 +15,11 @@ OBJS = $(patsubst $(SRCDIR)/%.cpp,$(BLDDIR)/%.o, $(SRCS))
 
 $(BINDIR)/$(TARGET): $(OBJS)
 	@mkdir -p $(BINDIR)
-	g++ $(FLAGS) $^ -o $@
+	@$(CC) $(CFLAGS) $(LIBRARIES) -o $@ $^ $(LDFLAGS)
 
 $(BLDDIR)/%.o: $(SRCDIR)/%.cpp $(SRCDIR)
 	@mkdir -p $(dir $@)
-	g++ $(FLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
 
 clean:
 	rm -r $(BINDIR)
