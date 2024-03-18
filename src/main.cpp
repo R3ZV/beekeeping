@@ -16,11 +16,19 @@ enum GameState {
     Stats,
 };
 
-// TODO: add destructors to unload textures
+// BUG: doesn't unload as expected
+// Perhaps move it to its .h and .cpp file
 class GameTexture {
     Texture2D background;
 public:
-    GameTexture (Texture2D game_background) : background(game_background) {}
+    GameTexture () {
+        background = LoadTexture("./assets/background.png");
+    }
+
+    ~GameTexture() {
+        UnloadTexture(background);
+    }
+
     Texture2D get_background() {
         return background;
     }
@@ -34,7 +42,7 @@ class Game {
     void game_main_menu() {
         ClearBackground(RAYWHITE);
         DrawTexture(textures.get_background(), 0, 0, RAYWHITE);
-        DrawText("BEE KEEPER", WIDTH / 2 - 275, 5, 90, RAYWHITE);
+        DrawText("BEEKEEPER", WIDTH / 2 - 275, 5, 90, RAYWHITE);
         DrawText("Press ENTER", WIDTH / 2 - 120, 100, 30, DARKGRAY);
 
         if (IsKeyPressed(KEY_ENTER)) {
@@ -63,15 +71,10 @@ class Game {
 
         // TODO:
         // make it so after you press F a flag is turned on and the player
-        // can select the field using vim keys
-        // when the flag is selected no other shorcut works
-        // When you have a field selected you press enter and go to the field
-        // Or it can be like Vimium where you press F and for each
-        // field a text will appear in the corner denoting what button to press
+        // can select from 7 fields
+        // A field number will appear in the corner denoting what button to press
         // to go to it
         if (state == GameState::FieldSelection) {
-            // TODO: add overlay for each field with
-            // numbers from 1 to 7 to select which field to go to
             if (IsKeyPressed(KEY_B)) {
                 state = GameState::Lobby;
             } else if (IsKeyPressed(KEY_ENTER)) {
@@ -224,8 +227,7 @@ int main() {
     Player player = Player::load_stats();
     InitWindow(WIDTH, HEIGHT, "Bee Keeping");
 
-    Texture2D background = LoadTexture("./assets/background.png");
-    GameTexture textures = GameTexture(background);
+    GameTexture textures = GameTexture();
     Game game = Game(MainMenu, player, textures);
 
     std::cout << player;
