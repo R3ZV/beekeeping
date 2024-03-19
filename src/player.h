@@ -86,6 +86,10 @@ public:
     short int get_backpack_upgrades();
     short int get_collect_amount_upgrades();
     short int get_honey_per_pollen_upgrades();
+
+    void set_pollen(int red_pollen, int blue_pollen, int white_pollen);
+
+    void set_honey();
 };
 
 #endif // PLAYER_H

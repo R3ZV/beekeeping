@@ -203,3 +203,16 @@ short int Player::get_collect_amount_upgrades() {
 short int Player::get_honey_per_pollen_upgrades() {
     return honey_per_pollen_upgrades;
 }
+
+void Player::set_pollen(int red_pollen, int blue_pollen, int white_pollen) {
+    pollen += red_pollen * red_pollen_multiplier;
+    pollen += blue_pollen * blue_pollen_multiplier;
+    pollen += white_pollen * white_pollen_multiplier;
+    pollen = std::min(pollen, backpack_capacity);
+    assert(pollen <= backpack_capacity);
+}
+
+void Player::set_honey() {
+    honey += pollen * honey_per_pollen;
+    pollen = 0;
+}

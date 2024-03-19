@@ -13,6 +13,9 @@ you can get more bees and upgrade your backpack and your pollen collector.
 - Player stats debug
 - Player stats window
 - Loading player stats from JSON file
+- Can go to a field
+- Can collect pollen
+- Can sell pollen for honey
 
 # Requirements
 - G++ 11
