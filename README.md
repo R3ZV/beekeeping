@@ -8,9 +8,7 @@ collect pollen with the help of your bees in order to make honey, so
 you can get more bees and upgrade your backpack and your pollen collector.
 
 ## Showcase
-<iframe width="560" height="315" src="https://www.youtube.com/embed/Cs3tYSIzZAw?si=qPrme-VqiNqsxkpA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-
-
+[![Image Alt Text Here](https://img.youtube.com/vi/Cs3tYSIzZAw/0.jpg)](https://www.youtube.com/watch?v=Cs3tYSIzZAw)
 
 # Functionality
 - Reads the player stats from JSON file
