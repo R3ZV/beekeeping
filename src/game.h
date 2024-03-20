@@ -24,7 +24,8 @@ enum GameState {
 class Game {
     GameState state;
     Player player;
-    GameTexture textures;
+    // GameTexture textures;
+    std::shared_ptr<GameTexture> textures;
     double timer;
     std::queue<GameAction> actions;
 
@@ -38,7 +39,8 @@ public:
     Game(
         GameState state,
         Player instance,
-        GameTexture textures,
+        // GameTexture textures,
+        std::shared_ptr<GameTexture> textures,
         double timer,
         std::queue<GameAction> actions
     );

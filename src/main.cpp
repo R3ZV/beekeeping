@@ -2,6 +2,7 @@
 #include "player.h"
 #include "game.h"
 
+#include <memory>
 #include <raylib.h>
 #include <iostream>
 
@@ -10,7 +11,8 @@ int main() {
 
     InitWindow(WIDTH, HEIGHT, "Bee Keeping");
 
-    GameTexture textures = GameTexture();
+    // GameTexture textures = GameTexture();
+    auto textures = std::make_shared<GameTexture>();
     Game game = Game(MainMenu, player, textures, GetTime(), {});
 
     std::cout << player;

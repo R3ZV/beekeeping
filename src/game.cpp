@@ -2,7 +2,8 @@
 
 void Game::game_main_menu() {
     ClearBackground(RAYWHITE);
-    DrawTexture(textures.get_background(), 0, 0, RAYWHITE);
+    // DrawTexture(textures.get_background(), 0, 0, RAYWHITE);
+    DrawTexture(textures->get_background(), 0, 0, RAYWHITE);
     DrawText("BEEKEEPER", WIDTH / 2 - 275, 5, 90, RAYWHITE);
     DrawText("Press ENTER", WIDTH / 2 - 120, 100, 30, DARKGRAY);
 
@@ -39,19 +40,22 @@ void Game::game_lobby() {
     int field_icon_y = 200;
 
     // First 3
-    DrawTexture(textures.get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
+    // DrawTexture(textures.get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
+    DrawTexture(textures->get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
     if (state == GameState::FieldSelection) {
         DrawText("1", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
     }
     field_icon_x += X_GAP;
 
-    DrawTexture(textures.get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
+    // DrawTexture(textures.get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
+    DrawTexture(textures->get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
     if (state == GameState::FieldSelection) {
         DrawText("2", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
     }
     field_icon_x += X_GAP;
 
-    DrawTexture(textures.get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
+    // DrawTexture(textures.get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
+    DrawTexture(textures->get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
     if (state == GameState::FieldSelection) {
         DrawText("3", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
     }
@@ -60,19 +64,22 @@ void Game::game_lobby() {
     field_icon_y += Y_GAP;
     field_icon_x = 350;
 
-    DrawTexture(textures.get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
+    // DrawTexture(textures.get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
+    DrawTexture(textures->get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
     if (state == GameState::FieldSelection) {
         DrawText("4", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
     }
     field_icon_x += X_GAP;
 
-    DrawTexture(textures.get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
+    // DrawTexture(textures.get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
+    DrawTexture(textures->get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
     if (state == GameState::FieldSelection) {
         DrawText("5", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
     }
     field_icon_x += X_GAP;
 
-    DrawTexture(textures.get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
+    // DrawTexture(textures.get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
+    DrawTexture(textures->get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
     if (state == GameState::FieldSelection) {
         DrawText("6", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
     }
@@ -81,7 +88,8 @@ void Game::game_lobby() {
     field_icon_x = 350 + X_GAP;
 
     // Last
-    DrawTexture(textures.get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
+    // DrawTexture(textures.get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
+    DrawTexture(textures->get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
     if (state == GameState::FieldSelection) {
         DrawText("7", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
     }
@@ -255,7 +263,7 @@ void Game::game_stats() {
 Game::Game(
     GameState state,
     Player instance,
-    GameTexture textures,
+    std::shared_ptr<GameTexture> textures,
     double timer,
     std::queue<GameAction> actions
 ) :

@@ -9,7 +9,7 @@ class GameTexture {
 public:
     GameTexture ();
     GameTexture (const GameTexture& other);
-    // ~GameTexture();
+    ~GameTexture();
     Texture2D get_background();
     Texture2D get_strawberry_icon();
 };

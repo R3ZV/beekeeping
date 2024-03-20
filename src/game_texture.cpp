@@ -5,10 +5,10 @@ GameTexture::GameTexture() {
     strawberry_icon = LoadTexture("./assets/strawberry.png");
 }
 
-// GameTexture::~GameTexture() {
-//     UnloadTexture(background);
-//     UnloadTexture(strawberry_icon);
-// }
+GameTexture::~GameTexture() {
+    UnloadTexture(background);
+    UnloadTexture(strawberry_icon);
+}
 
 GameTexture::GameTexture (const GameTexture& other) {
     background = other.background;
