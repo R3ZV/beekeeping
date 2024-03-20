@@ -18,6 +18,8 @@ public:
         short int bee_honey_per_pollen);
 
     BeeColor get_type();
+    short int get_honey_per_pollen();
+    short int get_color_multiplier();
 };
 
 #endif // BEE_H

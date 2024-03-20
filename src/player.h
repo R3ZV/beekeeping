@@ -99,10 +99,13 @@ public:
     short int get_collect_amount_upgrades();
     short int get_honey_per_pollen_upgrades();
 
-    void set_pollen(PollenCollection collected_pollen);
+    void set_pollen(int amount);
+    void set_honey(int amount);
+    void set_collect_amount_upgrades();
 
-    void set_honey();
-
+    int calculate_pollen(PollenCollection collected_pollen);
+    int calculate_honey_per_pollen();
+    int calculate_collect_amount();
     PollenCollection collect(int red_flowers, int blue_flowers, int white_flowers);
 };
 

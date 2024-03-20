@@ -118,7 +118,9 @@ void Game::game_lobby() {
         } else if (IsKeyPressed(KEY_S)) {
             state = GameState::Stats;
         } else if (IsKeyPressed(KEY_H)) {
-            player.set_honey();
+            int honey = player.get_honey() + player.get_pollen() * player.calculate_honey_per_pollen();
+            player.set_honey(honey);
+            player.set_pollen(0);
         } else if (IsKeyPressed(KEY_F)) {
             state = GameState::FieldSelection;
         }
@@ -160,11 +162,14 @@ void Game::game_field() {
         double POLLEN_TEXT_Y = std::uniform_real_distribution<>(FIELD_Y, FILED_HEIGHT - 10)(mt);
 
         PollenCollection collected = player.collect(10, 2, 4);
-        std::string total_pollen = "+" + std::to_string(collected.get_red_pollen() + collected.get_blue_pollen() + collected.get_white_pollen());
+        std::string total_pollen = "+" + std::to_string(
+                                       collected.get_red_pollen()
+                                       + collected.get_blue_pollen()
+                                       + collected.get_white_pollen());
         actions.push_back(GameAction(3, GetTime(), GameActionType::DisplayText,
                                      total_pollen.c_str(), POLLEN_TEXT_X, POLLEN_TEXT_Y, 20, WHITE, 0));
 
-        player.set_pollen(collected);
+        player.set_pollen(player.get_pollen() + player.calculate_pollen(collected));
     }
 }
 
@@ -174,8 +179,32 @@ void Game::game_upgrades() {
     DrawText("UPGRADES:", WIDTH / 2 - 5 * NORMAL_FONT_SIZE, 100, 2 * NORMAL_FONT_SIZE, RAYWHITE);
     DrawText("[B]ack", WIDTH / 2 - 3 * NORMAL_FONT_SIZE, HEIGHT - 100, NORMAL_FONT_SIZE, RAYWHITE);
 
+    int pos_x = 100, pos_y = 200;
+    const int CARD_WIDTH = 128;
+    const int CARD_HEIGHT = 64;
+    const int POS_X_MARGIN = 100;
+    const int POS_Y_MARGIN = 100;
+    const int gap = 10;
+
+    DrawRectangle(pos_x, pos_y, CARD_WIDTH, CARD_HEIGHT, WHITE);
+    DrawText("1", pos_x + gap, pos_y + gap, 20, BLACK);
+    // TODO: make it based on string length
+    DrawText("100 H", pos_x + CARD_WIDTH / 2 - 2 * 20, pos_y + CARD_HEIGHT + gap, 20, BLACK);
+    std::cout << "Player has: " << player.get_collect_amount_upgrades() << " upgrades\n";
     if (IsKeyPressed(KEY_B)) {
         state = GameState::Lobby;
+    } else if (IsKeyPressed(KEY_ONE)) {
+        if (player.get_honey() > 100) {
+            player.set_collect_amount_upgrades();
+            player.set_honey(player.get_honey() - 100);
+            // COME
+        }
+    } else if (IsKeyPressed(KEY_TWO)) {
+        std::cout << "TODO\n";
+    } else if (IsKeyPressed(KEY_THREE)) {
+        std::cout << "TODO\n";
+    } else if (IsKeyPressed(KEY_FOUR)) {
+        std::cout << "TODO\n";
     }
 }
 

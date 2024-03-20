@@ -36,3 +36,10 @@ Bee::Bee(
 BeeColor Bee::get_type() {
     return type;
 }
+
+short int Bee::get_honey_per_pollen() {
+    return honey_per_pollen;
+}
+short int Bee::get_color_multiplier() {
+    return color_multiplier;
+}

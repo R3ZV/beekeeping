@@ -217,28 +217,54 @@ short int Player::get_honey_per_pollen_upgrades() {
     return honey_per_pollen_upgrades;
 }
 
-void Player::set_pollen(PollenCollection collected_pollen) {
-    int red_pollen = collected_pollen.get_red_pollen();
-    int blue_pollen = collected_pollen.get_blue_pollen();
-    int white_pollen = collected_pollen.get_white_pollen();
-
-    pollen += red_pollen + blue_pollen + white_pollen;
-    pollen += red_pollen * (red_pollen_multiplier / 100);
-    pollen += blue_pollen * (blue_pollen_multiplier / 100);
-    pollen += white_pollen * (white_pollen_multiplier / 100);
+void Player::set_pollen(int amount) {
+    pollen = amount;
     pollen = std::min(pollen, backpack_capacity);
     assert(pollen <= backpack_capacity);
 }
 
-void Player::set_honey() {
-    honey += pollen * honey_per_pollen;
-    pollen = 0;
+void Player::set_honey(int amount) {
+    honey = amount;
+}
+
+int Player::calculate_collect_amount() {
+    return collect_amount + collect_amount_upgrades * (collect_amount_upgrades + 1) / 2;
+}
+
+int Player::calculate_pollen(PollenCollection collected_pollen) {
+    int red_pollen = collected_pollen.get_red_pollen();
+    int blue_pollen = collected_pollen.get_blue_pollen();
+    int white_pollen = collected_pollen.get_white_pollen();
+
+    int total_pollen = 0;
+    total_pollen += red_pollen + blue_pollen + white_pollen;
+    total_pollen += red_pollen * (red_pollen_multiplier / 100);
+    total_pollen += blue_pollen * (blue_pollen_multiplier / 100);
+    total_pollen += white_pollen * (white_pollen_multiplier / 100);
+    return total_pollen;
 }
 
 PollenCollection Player::collect(int red_flowers, int blue_flowers, int white_flowers) {
-    int player_collect_amount = collect_amount + collect_amount_upgrades * (collect_amount_upgrades + 1) / 2;
+    // BUG: fix this to increse the number accordingly
+    // it now doesn't update the collect amount as it should
+
+    int player_collect_amount = calculate_collect_amount();
+    std::cout << "Collecting: " << player_collect_amount << "\n";
     int red_pollen = red_flowers + red_flowers * (player_collect_amount / 20);
     int blue_pollen = blue_flowers + blue_flowers * (player_collect_amount / 20);
     int white_pollen = white_flowers + white_flowers * (player_collect_amount / 20);
     return PollenCollection(red_pollen, blue_pollen, white_pollen);
+}
+
+void Player::set_collect_amount_upgrades() {
+    collect_amount_upgrades++;
+    collect_amount_upgrades = std::min(collect_amount_upgrades, (short int)10);
+}
+
+int Player::calculate_honey_per_pollen() {
+    int h_per_pollen = honey_per_pollen_upgrades;
+    for (Bee bee : bees) {
+        h_per_pollen += bee.get_honey_per_pollen();
+    }
+    return h_per_pollen;
 }
