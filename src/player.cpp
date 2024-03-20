@@ -1,5 +1,18 @@
 #include "player.h"
 
+PollenCollection::PollenCollection(int red_pollen, int blue_pollen, int white_pollen) :
+    red_pollen(red_pollen), blue_pollen(blue_pollen), white_pollen(white_pollen) {}
+
+int PollenCollection::get_red_pollen() {
+    return red_pollen;
+}
+int PollenCollection::get_blue_pollen() {
+    return blue_pollen;
+}
+int PollenCollection::get_white_pollen() {
+    return white_pollen;
+}
+
 Player::Player (
     std::string name,
     int total_honey,
@@ -204,10 +217,15 @@ short int Player::get_honey_per_pollen_upgrades() {
     return honey_per_pollen_upgrades;
 }
 
-void Player::set_pollen(int red_pollen, int blue_pollen, int white_pollen) {
-    pollen += red_pollen * red_pollen_multiplier;
-    pollen += blue_pollen * blue_pollen_multiplier;
-    pollen += white_pollen * white_pollen_multiplier;
+void Player::set_pollen(PollenCollection collected_pollen) {
+    int red_pollen = collected_pollen.get_red_pollen();
+    int blue_pollen = collected_pollen.get_blue_pollen();
+    int white_pollen = collected_pollen.get_white_pollen();
+
+    pollen += red_pollen + blue_pollen + white_pollen;
+    pollen += red_pollen * (red_pollen_multiplier / 100);
+    pollen += blue_pollen * (blue_pollen_multiplier / 100);
+    pollen += white_pollen * (white_pollen_multiplier / 100);
     pollen = std::min(pollen, backpack_capacity);
     assert(pollen <= backpack_capacity);
 }
@@ -215,4 +233,12 @@ void Player::set_pollen(int red_pollen, int blue_pollen, int white_pollen) {
 void Player::set_honey() {
     honey += pollen * honey_per_pollen;
     pollen = 0;
+}
+
+PollenCollection Player::collect(int red_flowers, int blue_flowers, int white_flowers) {
+    int player_collect_amount = collect_amount + collect_amount_upgrades * (collect_amount_upgrades + 1) / 2;
+    int red_pollen = red_flowers + red_flowers * (player_collect_amount / 20);
+    int blue_pollen = blue_flowers + blue_flowers * (player_collect_amount / 20);
+    int white_pollen = white_flowers + white_flowers * (player_collect_amount / 20);
+    return PollenCollection(red_pollen, blue_pollen, white_pollen);
 }

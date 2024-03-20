@@ -15,6 +15,8 @@ you can get more bees and upgrade your backpack and your pollen collector.
 - Loading player stats from JSON file
 - Can go to a field
 - Can collect pollen
+- Collected pollen is based on the flowers you have on the field and your collect amount
+- When you collect pollen a text shows how much pollen you have collected
 - Can sell pollen for honey
 
 # Requirements

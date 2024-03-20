@@ -9,6 +9,18 @@
 #include "bee.h"
 #include "nlohmann/json.hpp"
 
+class PollenCollection {
+    int red_pollen;
+    int blue_pollen;
+    int white_pollen;
+public:
+    PollenCollection(int red_pollen, int blue_pollen, int white_pollen);
+
+    int get_red_pollen();
+    int get_blue_pollen();
+    int get_white_pollen();
+};
+
 class Player {
     const std::string name;
 
@@ -87,9 +99,11 @@ public:
     short int get_collect_amount_upgrades();
     short int get_honey_per_pollen_upgrades();
 
-    void set_pollen(int red_pollen, int blue_pollen, int white_pollen);
+    void set_pollen(PollenCollection collected_pollen);
 
     void set_honey();
+
+    PollenCollection collect(int red_flowers, int blue_flowers, int white_flowers);
 };
 
 #endif // PLAYER_H

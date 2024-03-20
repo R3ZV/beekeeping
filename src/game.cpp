@@ -1,4 +1,6 @@
 #include "game.h"
+#include "player.h"
+#include <string>
 
 void Game::game_main_menu() {
     ClearBackground(RAYWHITE);
@@ -156,15 +158,13 @@ void Game::game_field() {
         std::mt19937 mt(rd());
         double POLLEN_TEXT_X = std::uniform_real_distribution<>(FIELD_X, FIELD_X + FIELD_WIDTH - 10)(mt);
         double POLLEN_TEXT_Y = std::uniform_real_distribution<>(FIELD_Y, FILED_HEIGHT - 10)(mt);
-        // TODO: change +1 to the actual value or just make it a big "+"
-        actions.push_back(GameAction(3, GetTime(), GameActionType::DisplayText,
-                                     "+1", POLLEN_TEXT_X, POLLEN_TEXT_Y, 20, WHITE, 0));
 
-        // TODO:
-        // player.calculate_pollen(int red_flowers, int blue flower, int white_flower);
-        // this numbers should be based on the collect_amount
-        // and the field flowers
-        player.set_pollen(1, 1, 1);
+        PollenCollection collected = player.collect(10, 2, 4);
+        std::string total_pollen = "+" + std::to_string(collected.get_red_pollen() + collected.get_blue_pollen() + collected.get_white_pollen());
+        actions.push_back(GameAction(3, GetTime(), GameActionType::DisplayText,
+                                     total_pollen.c_str(), POLLEN_TEXT_X, POLLEN_TEXT_Y, 20, WHITE, 0));
+
+        player.set_pollen(collected);
     }
 }
 
