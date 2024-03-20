@@ -11,9 +11,8 @@ int main() {
 
     InitWindow(WIDTH, HEIGHT, "Bee Keeping");
 
-    // GameTexture textures = GameTexture();
     auto textures = std::make_shared<GameTexture>();
-    Game game = Game(MainMenu, player, textures, GetTime(), {});
+    Game game = Game(MainMenu, player, textures, {});
 
     std::cout << player;
     while (!WindowShouldClose()) {

@@ -24,10 +24,8 @@ enum GameState {
 class Game {
     GameState state;
     Player player;
-    // GameTexture textures;
     std::shared_ptr<GameTexture> textures;
-    double timer;
-    std::queue<GameAction> actions;
+    std::vector<GameAction> actions;
 
     void game_main_menu();
     void game_lobby();
@@ -39,10 +37,8 @@ public:
     Game(
         GameState state,
         Player instance,
-        // GameTexture textures,
         std::shared_ptr<GameTexture> textures,
-        double timer,
-        std::queue<GameAction> actions
+        std::vector<GameAction> actions
     );
     void draw_state();
 };

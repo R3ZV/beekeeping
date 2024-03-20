@@ -2,7 +2,6 @@
 
 void Game::game_main_menu() {
     ClearBackground(RAYWHITE);
-    // DrawTexture(textures.get_background(), 0, 0, RAYWHITE);
     DrawTexture(textures->get_background(), 0, 0, RAYWHITE);
     DrawText("BEEKEEPER", WIDTH / 2 - 275, 5, 90, RAYWHITE);
     DrawText("Press ENTER", WIDTH / 2 - 120, 100, 30, DARKGRAY);
@@ -40,21 +39,18 @@ void Game::game_lobby() {
     int field_icon_y = 200;
 
     // First 3
-    // DrawTexture(textures.get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
     DrawTexture(textures->get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
     if (state == GameState::FieldSelection) {
         DrawText("1", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
     }
     field_icon_x += X_GAP;
 
-    // DrawTexture(textures.get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
     DrawTexture(textures->get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
     if (state == GameState::FieldSelection) {
         DrawText("2", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
     }
     field_icon_x += X_GAP;
 
-    // DrawTexture(textures.get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
     DrawTexture(textures->get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
     if (state == GameState::FieldSelection) {
         DrawText("3", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
@@ -64,21 +60,18 @@ void Game::game_lobby() {
     field_icon_y += Y_GAP;
     field_icon_x = 350;
 
-    // DrawTexture(textures.get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
     DrawTexture(textures->get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
     if (state == GameState::FieldSelection) {
         DrawText("4", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
     }
     field_icon_x += X_GAP;
 
-    // DrawTexture(textures.get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
     DrawTexture(textures->get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
     if (state == GameState::FieldSelection) {
         DrawText("5", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
     }
     field_icon_x += X_GAP;
 
-    // DrawTexture(textures.get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
     DrawTexture(textures->get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
     if (state == GameState::FieldSelection) {
         DrawText("6", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
@@ -88,7 +81,6 @@ void Game::game_lobby() {
     field_icon_x = 350 + X_GAP;
 
     // Last
-    // DrawTexture(textures.get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
     DrawTexture(textures->get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
     if (state == GameState::FieldSelection) {
         DrawText("7", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
@@ -146,16 +138,15 @@ void Game::game_field() {
     DrawRectangle(FIELD_X, FIELD_Y, FIELD_WIDTH, FILED_HEIGHT, GREEN);
 
     for (int i = 0; i < (int)actions.size(); ++i) {
-        GameAction action = actions.front();
-        actions.pop();
+        GameAction &action = actions[i];
+        action.decrees_opacity(0.3);
+        action.move_y(0.1);
         action.start_action();
-        if (GetTime() - timer < action.get_deelay()) {
-            actions.push(action);
-        }
-    }
 
-    if (actions.empty()) {
-        timer = GetTime();
+        if (GetTime() - action.get_timer() >= action.get_deelay()) {
+            actions.erase(actions.begin() + i);
+            i--;
+        }
     }
 
     if (IsKeyPressed(KEY_B)) {
@@ -165,11 +156,9 @@ void Game::game_field() {
         std::mt19937 mt(rd());
         double POLLEN_TEXT_X = std::uniform_real_distribution<>(FIELD_X, FIELD_X + FIELD_WIDTH - 10)(mt);
         double POLLEN_TEXT_Y = std::uniform_real_distribution<>(FIELD_Y, FILED_HEIGHT - 10)(mt);
-        auto display = [&]() {
-            DrawText("+1", POLLEN_TEXT_X, POLLEN_TEXT_Y, 20, WHITE);
-            POLLEN_TEXT_Y -= 0.1;
-        };
-        actions.push(GameAction(0.6, display));
+        // TODO: change +1 to the actual value or just make it a big "+"
+        actions.push_back(GameAction(3, GetTime(), GameActionType::DisplayText,
+                                     "+1", POLLEN_TEXT_X, POLLEN_TEXT_Y, 20, WHITE, 0));
 
         // TODO:
         // player.calculate_pollen(int red_flowers, int blue flower, int white_flower);
@@ -264,13 +253,11 @@ Game::Game(
     GameState state,
     Player instance,
     std::shared_ptr<GameTexture> textures,
-    double timer,
-    std::queue<GameAction> actions
+    std::vector<GameAction> actions
 ) :
     state(state),
     player(instance),
     textures(textures),
-    timer(timer),
     actions(actions)
 {}
 
