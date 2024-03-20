@@ -249,7 +249,6 @@ PollenCollection Player::collect(int red_flowers, int blue_flowers, int white_fl
     // it now doesn't update the collect amount as it should
 
     int player_collect_amount = calculate_collect_amount();
-    std::cout << "Collecting: " << player_collect_amount << "\n";
     int red_pollen = red_flowers + red_flowers * (player_collect_amount / 20);
     int blue_pollen = blue_flowers + blue_flowers * (player_collect_amount / 20);
     int white_pollen = white_flowers + white_flowers * (player_collect_amount / 20);

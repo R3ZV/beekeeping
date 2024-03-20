@@ -176,28 +176,49 @@ void Game::game_field() {
 void Game::game_upgrades() {
     const int NORMAL_FONT_SIZE = 20;
     ClearBackground(ORANGE);
-    DrawText("UPGRADES:", WIDTH / 2 - 5 * NORMAL_FONT_SIZE, 100, 2 * NORMAL_FONT_SIZE, RAYWHITE);
-    DrawText("[B]ack", WIDTH / 2 - 3 * NORMAL_FONT_SIZE, HEIGHT - 100, NORMAL_FONT_SIZE, RAYWHITE);
 
-    int pos_x = 100, pos_y = 200;
+    char buffer[50];
+    std::sprintf(buffer, "Honey: %d", player.get_honey());
+    DrawText(buffer, 2 * NORMAL_FONT_SIZE, 20, NORMAL_FONT_SIZE, RAYWHITE);
+
+    DrawText("UPGRADES:", WIDTH / 2 - 5 * NORMAL_FONT_SIZE, 100, 2 * NORMAL_FONT_SIZE, RAYWHITE);
+    DrawText("[B]ack", WIDTH / 2 - MeasureText("[B]ack", NORMAL_FONT_SIZE), HEIGHT - 100, NORMAL_FONT_SIZE, RAYWHITE);
+
     const int CARD_WIDTH = 128;
     const int CARD_HEIGHT = 64;
-    const int POS_X_MARGIN = 100;
+    const int POS_X_MARGIN = 50;
     const int POS_Y_MARGIN = 100;
     const int gap = 10;
 
-    DrawRectangle(pos_x, pos_y, CARD_WIDTH, CARD_HEIGHT, WHITE);
+    int pos_x = WIDTH / 2 - CARD_WIDTH - POS_X_MARGIN / 2, pos_y = 200;
+    DrawTexture(textures->get_collect_amount_upgrade_icon(), pos_x, pos_y, WHITE);
     DrawText("1", pos_x + gap, pos_y + gap, 20, BLACK);
-    // TODO: make it based on string length
-    DrawText("100 H", pos_x + CARD_WIDTH / 2 - 2 * 20, pos_y + CARD_HEIGHT + gap, 20, BLACK);
-    std::cout << "Player has: " << player.get_collect_amount_upgrades() << " upgrades\n";
+    DrawText("100 H", pos_x + CARD_WIDTH / 2 - MeasureText("100 H", 20), pos_y + CARD_HEIGHT + gap, 20, BLACK);
+
+    pos_x += CARD_WIDTH + POS_X_MARGIN;
+
+    DrawTexture(textures->get_backpack_upgrade_icon(), pos_x, pos_y, WHITE);
+    DrawText("2", pos_x + gap, pos_y + gap, 20, BLACK);
+    DrawText("100 H", pos_x + CARD_WIDTH / 2 - MeasureText("100 H", 20), pos_y + CARD_HEIGHT + gap, 20, BLACK);
+
+    pos_y += CARD_HEIGHT + POS_Y_MARGIN;
+    pos_x = WIDTH / 2 - CARD_WIDTH - POS_X_MARGIN / 2;
+
+    DrawTexture(textures->get_honey_per_pollen_upgrade_icon(), pos_x, pos_y, WHITE);
+    DrawText("3", pos_x + gap, pos_y + gap, 20, BLACK);
+    DrawText("100 H", pos_x + CARD_WIDTH / 2 - MeasureText("100 H", 20), pos_y + CARD_HEIGHT + gap, 20, BLACK);
+    pos_x += CARD_WIDTH + POS_X_MARGIN;
+
+    DrawTexture(textures->get_bee_egg_icon(), pos_x, pos_y, WHITE);
+    DrawText("4", pos_x + gap, pos_y + gap, 20, BLACK);
+    DrawText("100 H", pos_x + CARD_WIDTH / 2 - MeasureText("100 H", 20), pos_y + CARD_HEIGHT + gap, 20, BLACK);
+
     if (IsKeyPressed(KEY_B)) {
         state = GameState::Lobby;
     } else if (IsKeyPressed(KEY_ONE)) {
-        if (player.get_honey() > 100) {
+        if (player.get_honey() >= 100) {
             player.set_collect_amount_upgrades();
             player.set_honey(player.get_honey() - 100);
-            // COME
         }
     } else if (IsKeyPressed(KEY_TWO)) {
         std::cout << "TODO\n";
