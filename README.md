@@ -28,9 +28,11 @@ This project also uses [nlohmann/json](https://github.com/nlohmann/json)
 for serializing / deserializing json data.
 
 Tested on: 
+1. Arch Linux:
 - OS: Arch Linux x86_64
 - Kernel: 6.7.9-arch1-1
 
+2. Pop!_OS
 - OS: Pop!_OS 22.04 LTS x86_64
 - Kernel: 6.6.6-76060606-generic
 
