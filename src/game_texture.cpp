@@ -47,6 +47,10 @@ Texture2D GameTexture::get_strawberry_icon() {
     return strawberry_icon;
 }
 
+Texture2D GameTexture::get_sunflower_icon() {
+    return sunflower_icon;
+}
+
 Texture2D GameTexture::get_backpack_upgrade_icon() {
     return backpack_upgrade_icon;
 }

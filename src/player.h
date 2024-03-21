@@ -45,6 +45,7 @@ class Player {
     short int backpack_upgrades;
     short int collect_amount_upgrades;
     short int honey_per_pollen_upgrades;
+    short int max_upgrades;
 
     std::vector<Bee> bees;
 
@@ -98,10 +99,11 @@ public:
     short int get_backpack_upgrades();
     short int get_collect_amount_upgrades();
     short int get_honey_per_pollen_upgrades();
+    short int get_max_upgrades();
 
     void set_pollen(int amount);
     void set_honey(int amount);
-    void set_collect_amount_upgrades();
+    void set_collect_amount_upgrades(int amount);
 
     int calculate_pollen(PollenCollection collected_pollen);
     int calculate_honey_per_pollen();

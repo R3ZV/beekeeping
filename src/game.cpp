@@ -33,7 +33,6 @@ void Game::game_lobby() {
     DrawText(state == GameState::FieldSelection ? "[B]ack" : "[F]ields", WIDTH - NORMAL_FONT_SIZE * AVERAGE_LETTERS, HEIGHT - 100 - GAP, NORMAL_FONT_SIZE, RAYWHITE);
 
     // display fields
-    // TODO: add tag to each corner
     const int X_GAP = 116;
     const int Y_GAP = 80;
     const int TEXT_OFFSET = 5;
@@ -47,7 +46,7 @@ void Game::game_lobby() {
     }
     field_icon_x += X_GAP;
 
-    DrawTexture(textures->get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
+    DrawTexture(textures->get_sunflower_icon(), field_icon_x, field_icon_y, WHITE);
     if (state == GameState::FieldSelection) {
         DrawText("2", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
     }
@@ -216,8 +215,8 @@ void Game::game_upgrades() {
     if (IsKeyPressed(KEY_B)) {
         state = GameState::Lobby;
     } else if (IsKeyPressed(KEY_ONE)) {
-        if (player.get_honey() >= 100) {
-            player.set_collect_amount_upgrades();
+        if (player.get_honey() >= 100 && player.get_collect_amount_upgrades() < player.get_max_upgrades()) {
+            player.set_collect_amount_upgrades(player.get_collect_amount_upgrades() + 1);
             player.set_honey(player.get_honey() - 100);
         }
     } else if (IsKeyPressed(KEY_TWO)) {

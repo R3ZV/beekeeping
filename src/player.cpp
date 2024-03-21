@@ -51,7 +51,9 @@ Player::Player (
     collect_amount_upgrades(collect_amount_upgrades),
     honey_per_pollen_upgrades(honey_per_pollen_upgrades),
     bees(bees)
-{}
+{
+    max_upgrades = 20;
+}
 
 /// save_player_stats saves the player information inside a
 /// json file and returns wheather or not
@@ -217,6 +219,10 @@ short int Player::get_honey_per_pollen_upgrades() {
     return honey_per_pollen_upgrades;
 }
 
+short int Player::get_max_upgrades() {
+    return max_upgrades;
+}
+
 void Player::set_pollen(int amount) {
     pollen = amount;
     pollen = std::min(pollen, backpack_capacity);
@@ -255,9 +261,9 @@ PollenCollection Player::collect(int red_flowers, int blue_flowers, int white_fl
     return PollenCollection(red_pollen, blue_pollen, white_pollen);
 }
 
-void Player::set_collect_amount_upgrades() {
-    collect_amount_upgrades++;
-    collect_amount_upgrades = std::min(collect_amount_upgrades, (short int)10);
+void Player::set_collect_amount_upgrades(int amount) {
+    collect_amount_upgrades = amount;
+    assert(collect_amount_upgrades <= max_upgrades);
 }
 
 int Player::calculate_honey_per_pollen() {
