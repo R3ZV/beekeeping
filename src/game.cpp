@@ -52,7 +52,7 @@ void Game::game_lobby() {
     }
     field_icon_x += X_GAP;
 
-    DrawTexture(textures->get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
+    DrawTexture(textures->get_clover_icon(), field_icon_x, field_icon_y, WHITE);
     if (state == GameState::FieldSelection) {
         DrawText("3", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
     }
@@ -61,19 +61,19 @@ void Game::game_lobby() {
     field_icon_y += Y_GAP;
     field_icon_x = 350;
 
-    DrawTexture(textures->get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
+    DrawTexture(textures->get_cactus_icon(), field_icon_x, field_icon_y, WHITE);
     if (state == GameState::FieldSelection) {
         DrawText("4", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
     }
     field_icon_x += X_GAP;
 
-    DrawTexture(textures->get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
+    DrawTexture(textures->get_cherry_icon(), field_icon_x, field_icon_y, WHITE);
     if (state == GameState::FieldSelection) {
         DrawText("5", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
     }
     field_icon_x += X_GAP;
 
-    DrawTexture(textures->get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
+    DrawTexture(textures->get_orange_icon(), field_icon_x, field_icon_y, WHITE);
     if (state == GameState::FieldSelection) {
         DrawText("6", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
     }
@@ -82,7 +82,7 @@ void Game::game_lobby() {
     field_icon_x = 350 + X_GAP;
 
     // Last
-    DrawTexture(textures->get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
+    DrawTexture(textures->get_blueberry_icon(), field_icon_x, field_icon_y, WHITE);
     if (state == GameState::FieldSelection) {
         DrawText("7", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
     }
@@ -230,13 +230,13 @@ void Game::game_upgrades() {
 
 void Game::game_stats() {
     ClearBackground(RED);
-    const int FONT_SIZE = 20;
+    const int FONT_SIZE = 22;
     DrawText("STATS:", WIDTH / 2 - 3 * FONT_SIZE, 30, 2 * FONT_SIZE, RAYWHITE);
     DrawText("[B]ack", WIDTH / 2 - 3 * FONT_SIZE, HEIGHT - 30, FONT_SIZE, RAYWHITE);
 
     const int GAP = 24;
     const int BASE = 100;
-    const int NORMAL_FONT_SIZE = 18;
+    const int NORMAL_FONT_SIZE = 20;
     int row = 1;
 
     char buffer[50];

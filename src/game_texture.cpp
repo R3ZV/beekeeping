@@ -4,6 +4,11 @@ GameTexture::GameTexture() {
     background = LoadTexture("./assets/background.png");
     strawberry_icon = LoadTexture("./assets/strawberry_icon.png");
     sunflower_icon = LoadTexture("./assets/sunflower_icon.png");
+    clover_icon = LoadTexture("./assets/clover_icon.png");
+    cactus_icon = LoadTexture("./assets/cactus_icon.png");
+    cherry_icon = LoadTexture("./assets/cherry_icon.png");
+    orange_icon = LoadTexture("./assets/orange_icon.png");
+    blueberry_icon = LoadTexture("./assets/blueberry_icon.png");
     backpack_upgrade_icon = LoadTexture("./assets/backpack_capacity.png");
     collect_amount_upgrade_icon = LoadTexture("./assets/collect_amount.png");
     honey_per_pollen_upgrade_icon = LoadTexture("./assets/honey_per_pollen.png");
@@ -17,6 +22,11 @@ GameTexture::~GameTexture() {
     UnloadTexture(background);
     UnloadTexture(strawberry_icon);
     UnloadTexture(sunflower_icon);
+    UnloadTexture(clover_icon);
+    UnloadTexture(cactus_icon);
+    UnloadTexture(cherry_icon);
+    UnloadTexture(orange_icon);
+    UnloadTexture(blueberry_icon);
     UnloadTexture(backpack_upgrade_icon);
     UnloadTexture(collect_amount_upgrade_icon);
     UnloadTexture(honey_per_pollen_upgrade_icon);
@@ -78,3 +88,23 @@ Texture2D GameTexture::get_blue_bee_face() {
 Texture2D GameTexture::get_white_bee_face() {
     return white_bee_face;
 }
+Texture2D GameTexture::get_clover_icon() {
+    return clover_icon;
+}
+
+Texture2D GameTexture::get_cactus_icon() {
+    return cactus_icon;
+}
+
+Texture2D GameTexture::get_cherry_icon() {
+    return cherry_icon;
+}
+
+Texture2D GameTexture::get_orange_icon() {
+    return orange_icon;
+}
+
+Texture2D GameTexture::get_blueberry_icon() {
+    return blueberry_icon;
+}
+

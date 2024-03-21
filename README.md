@@ -41,3 +41,4 @@ Tested on:
 
 # Refererences
 Background inspired by [Patrick](https://www.artstation.com/blacklunaris)
+Field flowers inspired by [brittanyyt](https://www.pinterest.com/brittanyyt/)

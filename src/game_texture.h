@@ -7,6 +7,11 @@ class GameTexture {
     Texture2D background;
     Texture2D strawberry_icon;
     Texture2D sunflower_icon;
+    Texture2D clover_icon;
+    Texture2D cactus_icon;
+    Texture2D cherry_icon;
+    Texture2D orange_icon;
+    Texture2D blueberry_icon;
     Texture2D backpack_upgrade_icon;
     Texture2D collect_amount_upgrade_icon;
     Texture2D honey_per_pollen_upgrade_icon;
@@ -28,6 +33,11 @@ public:
     Texture2D get_red_bee_face();
     Texture2D get_blue_bee_face();
     Texture2D get_white_bee_face();
+    Texture2D get_clover_icon();
+    Texture2D get_cactus_icon();
+    Texture2D get_cherry_icon();
+    Texture2D get_orange_icon();
+    Texture2D get_blueberry_icon();
 };
 
 #endif // GAME_TEXTURE_H
