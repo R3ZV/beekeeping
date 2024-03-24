@@ -33,13 +33,13 @@ Bee::Bee(
     honey_per_pollen(honey_per_pollen)
 {}
 
-BeeColor Bee::get_type() {
+BeeColor Bee::get_type() const {
     return type;
 }
 
-short int Bee::get_honey_per_pollen() {
+short int Bee::get_honey_per_pollen() const {
     return honey_per_pollen;
 }
-short int Bee::get_color_multiplier() {
+short int Bee::get_color_multiplier() const {
     return color_multiplier;
 }

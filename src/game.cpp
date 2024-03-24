@@ -1,10 +1,19 @@
 #include "game.h"
-#include "player.h"
-#include <string>
+
+std::ostream &operator<<(std::ostream& out, const Game& game) {
+    out << "Game state: \n" << game.state;
+    out << "\n";
+
+    out << "Player: \n" << game.player;
+    out << "\n";
+
+    out << "Assets:\n " << *game.assets;
+    return out;
+}
 
 void Game::game_main_menu() {
     ClearBackground(RAYWHITE);
-    DrawTexture(textures->get_background(), 0, 0, RAYWHITE);
+    DrawTexture(assets->get_background(), 0, 0, RAYWHITE);
     DrawText("BEEKEEPER", WIDTH / 2 - 275, 5, 90, RAYWHITE);
     DrawText("Press ENTER", WIDTH / 2 - 120, 100, 30, DARKGRAY);
 
@@ -40,19 +49,19 @@ void Game::game_lobby() {
     int field_icon_y = 200;
 
     // First 3
-    DrawTexture(textures->get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
+    DrawTexture(assets->get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
     if (state == GameState::FieldSelection) {
         DrawText("1", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
     }
     field_icon_x += X_GAP;
 
-    DrawTexture(textures->get_sunflower_icon(), field_icon_x, field_icon_y, WHITE);
+    DrawTexture(assets->get_sunflower_icon(), field_icon_x, field_icon_y, WHITE);
     if (state == GameState::FieldSelection) {
         DrawText("2", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
     }
     field_icon_x += X_GAP;
 
-    DrawTexture(textures->get_clover_icon(), field_icon_x, field_icon_y, WHITE);
+    DrawTexture(assets->get_clover_icon(), field_icon_x, field_icon_y, WHITE);
     if (state == GameState::FieldSelection) {
         DrawText("3", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
     }
@@ -61,19 +70,19 @@ void Game::game_lobby() {
     field_icon_y += Y_GAP;
     field_icon_x = 350;
 
-    DrawTexture(textures->get_cactus_icon(), field_icon_x, field_icon_y, WHITE);
+    DrawTexture(assets->get_cactus_icon(), field_icon_x, field_icon_y, WHITE);
     if (state == GameState::FieldSelection) {
         DrawText("4", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
     }
     field_icon_x += X_GAP;
 
-    DrawTexture(textures->get_cherry_icon(), field_icon_x, field_icon_y, WHITE);
+    DrawTexture(assets->get_cherry_icon(), field_icon_x, field_icon_y, WHITE);
     if (state == GameState::FieldSelection) {
         DrawText("5", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
     }
     field_icon_x += X_GAP;
 
-    DrawTexture(textures->get_orange_icon(), field_icon_x, field_icon_y, WHITE);
+    DrawTexture(assets->get_orange_icon(), field_icon_x, field_icon_y, WHITE);
     if (state == GameState::FieldSelection) {
         DrawText("6", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
     }
@@ -82,7 +91,7 @@ void Game::game_lobby() {
     field_icon_x = 350 + X_GAP;
 
     // Last
-    DrawTexture(textures->get_blueberry_icon(), field_icon_x, field_icon_y, WHITE);
+    DrawTexture(assets->get_blueberry_icon(), field_icon_x, field_icon_y, WHITE);
     if (state == GameState::FieldSelection) {
         DrawText("7", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
     }
@@ -91,19 +100,19 @@ void Game::game_lobby() {
         if (IsKeyPressed(KEY_B)) {
             state = GameState::Lobby;
         } else if (IsKeyPressed(KEY_ONE)) {
-            state = GameState::Field;
+            state = GameState::StrawberryField;
         } else if (IsKeyPressed(KEY_TWO)) {
-            state = GameState::Field;
+            state = GameState::SunflowerField;
         } else if (IsKeyPressed(KEY_THREE)) {
-            state = GameState::Field;
+            state = GameState::CloverField;
         } else if (IsKeyPressed(KEY_FOUR)) {
-            state = GameState::Field;
+            state = GameState::CactusField;
         } else if (IsKeyPressed(KEY_FIVE)) {
-            state = GameState::Field;
+            state = GameState::CherryField;
         } else if (IsKeyPressed(KEY_SIX)) {
-            state = GameState::Field;
+            state = GameState::OrangeField;
         } else if (IsKeyPressed(KEY_SEVEN)) {
-            state = GameState::Field;
+            state = GameState::BlueberryField;
         }
 
     } else {
@@ -133,7 +142,10 @@ void Game::game_field() {
     const int FIELD_Y = 120;
     const int FIELD_WIDTH = 512;
     const int FILED_HEIGHT = 256;
-    DrawRectangle(FIELD_X, FIELD_Y, FIELD_WIDTH, FILED_HEIGHT, GREEN);
+    std::vector<Field> fields = Field::all_fields(assets);
+    Field current_field = fields[state];
+    std::cout << "Field has following properties: \n" << current_field << "\n";
+    DrawTexture(current_field.get_field(), FIELD_X, FIELD_Y, WHITE);
 
     for (int i = 0; i < (int)actions.size(); ++i) {
         GameAction &action = actions[i];
@@ -155,13 +167,20 @@ void Game::game_field() {
         double POLLEN_TEXT_X = std::uniform_real_distribution<>(FIELD_X, FIELD_X + FIELD_WIDTH - 10)(mt);
         double POLLEN_TEXT_Y = std::uniform_real_distribution<>(FIELD_Y, FILED_HEIGHT - 10)(mt);
 
-        PollenCollection collected = player.collect(10, 2, 20);
+        PollenCollection collected = player.collect(
+                                         current_field.get_red_flowers(),
+                                         current_field.get_blue_flowers(),
+                                         current_field.get_white_flowers()
+                                     );
+        std::cout << "From the field with: " << current_field << "\n";
+        std::cout << "Collected: " << collected << "\n";
         std::string total_pollen = "+" + std::to_string(
                                        collected.get_red_pollen()
                                        + collected.get_blue_pollen()
                                        + collected.get_white_pollen());
-        actions.push_back(GameAction(3, GetTime(), GameActionType::DisplayText,
-                                     total_pollen.c_str(), POLLEN_TEXT_X, POLLEN_TEXT_Y, 20, WHITE, 0));
+        GameAction pollen_text = GameAction(3, GetTime(), GameActionType::DisplayText,
+                                            total_pollen.c_str(), POLLEN_TEXT_X, POLLEN_TEXT_Y, 20, WHITE, 0);
+        actions.push_back(pollen_text);
 
         player.set_pollen(player.get_pollen() + player.calculate_pollen(collected));
     }
@@ -185,25 +204,25 @@ void Game::game_upgrades() {
     const int gap = 10;
 
     int pos_x = WIDTH / 2 - CARD_WIDTH - POS_X_MARGIN / 2, pos_y = 200;
-    DrawTexture(textures->get_collect_amount_upgrade_icon(), pos_x, pos_y, WHITE);
+    DrawTexture(assets->get_collect_amount_upgrade_icon(), pos_x, pos_y, WHITE);
     DrawText("1", pos_x + gap, pos_y + gap, 20, BLACK);
     DrawText("100 H", pos_x + CARD_WIDTH / 2 - MeasureText("100 H", 20), pos_y + CARD_HEIGHT + gap, 20, BLACK);
 
     pos_x += CARD_WIDTH + POS_X_MARGIN;
 
-    DrawTexture(textures->get_backpack_upgrade_icon(), pos_x, pos_y, WHITE);
+    DrawTexture(assets->get_backpack_upgrade_icon(), pos_x, pos_y, WHITE);
     DrawText("2", pos_x + gap, pos_y + gap, 20, BLACK);
     DrawText("100 H", pos_x + CARD_WIDTH / 2 - MeasureText("100 H", 20), pos_y + CARD_HEIGHT + gap, 20, BLACK);
 
     pos_y += CARD_HEIGHT + POS_Y_MARGIN;
     pos_x = WIDTH / 2 - CARD_WIDTH - POS_X_MARGIN / 2;
 
-    DrawTexture(textures->get_honey_per_pollen_upgrade_icon(), pos_x, pos_y, WHITE);
+    DrawTexture(assets->get_honey_per_pollen_upgrade_icon(), pos_x, pos_y, WHITE);
     DrawText("3", pos_x + gap, pos_y + gap, 20, BLACK);
     DrawText("100 H", pos_x + CARD_WIDTH / 2 - MeasureText("100 H", 20), pos_y + CARD_HEIGHT + gap, 20, BLACK);
     pos_x += CARD_WIDTH + POS_X_MARGIN;
 
-    DrawTexture(textures->get_bee_egg_icon(), pos_x, pos_y, WHITE);
+    DrawTexture(assets->get_bee_egg_icon(), pos_x, pos_y, WHITE);
     DrawText("4", pos_x + gap, pos_y + gap, 20, BLACK);
     DrawText("100 H", pos_x + CARD_WIDTH / 2 - MeasureText("100 H", 20), pos_y + CARD_HEIGHT + gap, 20, BLACK);
 
@@ -302,12 +321,12 @@ void Game::game_stats() {
 Game::Game(
     GameState state,
     Player instance,
-    std::shared_ptr<GameTexture> textures,
+    std::shared_ptr<AssetManager> textures,
     std::vector<GameAction> actions
 ) :
     state(state),
     player(instance),
-    textures(textures),
+    assets(textures),
     actions(actions)
 {}
 
@@ -325,7 +344,31 @@ void Game::draw_state() {
         game_lobby();
         break;
 
-    case Field:
+    case StrawberryField:
+        game_field();
+        break;
+
+    case SunflowerField:
+        game_field();
+        break;
+
+    case CloverField:
+        game_field();
+        break;
+
+    case CactusField:
+        game_field();
+        break;
+
+    case CherryField:
+        game_field();
+        break;
+
+    case OrangeField:
+        game_field();
+        break;
+
+    case BlueberryField:
         game_field();
         break;
 

@@ -1,4 +1,4 @@
-#include "game_texture.h"
+#include "asset_manager.h"
 #include "player.h"
 #include "game.h"
 
@@ -11,10 +11,10 @@ int main() {
 
     InitWindow(WIDTH, HEIGHT, "Bee Keeping");
 
-    auto textures = std::make_shared<GameTexture>();
+    auto textures = std::make_shared<AssetManager>();
     Game game = Game(MainMenu, player, textures, {});
-
-    std::cout << player;
+    std::cout << "DBG:\n";
+    std::cout << game << "\n";
     while (!WindowShouldClose()) {
         BeginDrawing();
         game.draw_state();

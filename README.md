@@ -8,7 +8,7 @@ collect pollen with the help of your bees in order to make honey, so
 you can get more bees and upgrade your backpack and your pollen collector.
 
 ## Showcase
-[![Image Alt Text Here](https://img.youtube.com/vi/Cs3tYSIzZAw/0.jpg)](https://www.youtube.com/watch?v=Cs3tYSIzZAw)
+[![Image Alt Text Here](https://img.youtube.com/vi/15egOJGjXro/0.jpg)](https://www.youtube.com/watch?v=15egOJGjXro)
 
 # Functionality
 - Reads the player stats from JSON file
@@ -20,7 +20,11 @@ you can get more bees and upgrade your backpack and your pollen collector.
 - Can collect pollen
 - Collected pollen is based on the flowers you have on the field and your collect amount
 - When you collect pollen a text shows how much pollen you have collected
+- Each field has different based on the theme
 - Can sell pollen for honey
+- Can upgrade your collect amount (how much pollen you get when you press SPACE)
+- Can upgrade your backpack capacity
+- Can upgrade your honey per pollen (to get more honey)
 
 # Requirements
 - G++ 11

@@ -14,11 +14,12 @@ class PollenCollection {
     int blue_pollen;
     int white_pollen;
 public:
+    friend std::ostream &operator<<(std::ostream& out, const PollenCollection collected);
     PollenCollection(int red_pollen, int blue_pollen, int white_pollen);
 
-    int get_red_pollen();
-    int get_blue_pollen();
-    int get_white_pollen();
+    int get_red_pollen() const;
+    int get_blue_pollen() const;
+    int get_white_pollen() const;
 };
 
 class Player {
@@ -53,7 +54,7 @@ class Player {
     /// json file and returns wheather or not
     /// the save was successfully terminated.
     bool save_player_stats();
-    friend std::ostream &operator<<(std::ostream &out, const Player &player);
+    friend std::ostream &operator<<(std::ostream& out, const Player& player);
 
     int calculate_honey_per_pollen();
     int calculate_backpack_capacity();
@@ -84,26 +85,26 @@ public:
     /// load_player_stats reads the player_stats.json file
     /// and returns a Player object with its appropriate data
     static Player load_stats();
-    int get_pollen();
+    int get_pollen() const;
+    int get_honey() const;
+
+    int get_total_honey() const;
+    int get_total_bees() const;
+
+    int get_total_bees_of_type(BeeColor type) const;
+
+    int get_red_pollen_multiplier() const;
+    int get_blue_pollen_multiplier() const;
+    int get_white_pollen_multiplier() const;
+
     int get_backpack_capacity();
-    int get_honey();
-
-    int get_total_honey();
-    int get_total_bees();
-
-    int get_total_bees_of_type(BeeColor type);
-
-    int get_red_pollen_multiplier();
-    int get_blue_pollen_multiplier();
-    int get_white_pollen_multiplier();
-
     int get_honey_per_pollen();
     int get_collect_amount();
 
-    short int get_backpack_upgrades();
-    short int get_collect_amount_upgrades();
-    short int get_honey_per_pollen_upgrades();
-    short int get_max_upgrades();
+    short int get_backpack_upgrades() const;
+    short int get_collect_amount_upgrades() const;
+    short int get_honey_per_pollen_upgrades() const;
+    short int get_max_upgrades() const;
 
     void set_pollen(int amount);
     void set_honey(int amount);

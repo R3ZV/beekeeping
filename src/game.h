@@ -3,8 +3,10 @@
 
 #include "player.h"
 #include "game_action.h"
-#include "game_texture.h"
+#include "asset_manager.h"
+#include "field.h"
 
+#include <string>
 #include <queue>
 #include <raylib.h>
 #include <random>
@@ -13,10 +15,16 @@
 #define HEIGHT 800
 
 enum GameState {
+    StrawberryField,
+    SunflowerField,
+    CloverField,
+    CactusField,
+    CherryField,
+    OrangeField,
+    BlueberryField,
     MainMenu,
     Lobby,
     Upgrades,
-    Field,
     FieldSelection,
     Stats,
 };
@@ -24,7 +32,7 @@ enum GameState {
 class Game {
     GameState state;
     Player player;
-    std::shared_ptr<GameTexture> textures;
+    std::shared_ptr<AssetManager> assets;
     std::vector<GameAction> actions;
 
     void game_main_menu();
@@ -34,12 +42,14 @@ class Game {
     void game_stats();
 
 public:
+    friend std::ostream &operator<<(std::ostream& out, const Game& game);
     Game(
         GameState state,
         Player instance,
-        std::shared_ptr<GameTexture> textures,
+        std::shared_ptr<AssetManager> textures,
         std::vector<GameAction> actions
     );
+
     void draw_state();
 };
 

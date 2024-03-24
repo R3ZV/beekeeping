@@ -17,9 +17,9 @@ public:
     Bee(BeeColor bee_type, short int bee_color_multiplier,
         short int bee_honey_per_pollen);
 
-    BeeColor get_type();
-    short int get_honey_per_pollen();
-    short int get_color_multiplier();
+    BeeColor get_type() const;
+    short int get_honey_per_pollen() const;
+    short int get_color_multiplier() const;
 };
 
 #endif // BEE_H

@@ -3,13 +3,13 @@
 PollenCollection::PollenCollection(int red_pollen, int blue_pollen, int white_pollen) :
     red_pollen(red_pollen), blue_pollen(blue_pollen), white_pollen(white_pollen) {}
 
-int PollenCollection::get_red_pollen() {
+int PollenCollection::get_red_pollen() const {
     return red_pollen;
 }
-int PollenCollection::get_blue_pollen() {
+int PollenCollection::get_blue_pollen() const {
     return blue_pollen;
 }
-int PollenCollection::get_white_pollen() {
+int PollenCollection::get_white_pollen() const {
     return white_pollen;
 }
 
@@ -131,6 +131,18 @@ Player Player::load_stats() {
            );
 }
 
+std::ostream &operator<<(std::ostream& out, const PollenCollection collected) {
+    out << "Collected: \n";
+    out << "Red pollen: " << collected.red_pollen;
+    out << "\n";
+
+    out << "Blue pollen: " << collected.blue_pollen;
+    out << "\n";
+
+    out << "White pollen: " << collected.white_pollen;
+    return out;
+}
+
 std::ostream &operator<<(std::ostream &out, const Player &player) {
     out << "Name: " << player.name << std::endl;
     out << "Total honey: " << player.total_honey << std::endl;
@@ -159,7 +171,7 @@ std::ostream &operator<<(std::ostream &out, const Player &player) {
     return out;
 }
 
-int Player::get_pollen() {
+int Player::get_pollen() const {
     return pollen;
 }
 
@@ -167,19 +179,19 @@ int Player::get_backpack_capacity() {
     return calculate_backpack_capacity();
 }
 
-int Player::get_honey() {
+int Player::get_honey() const {
     return honey;
 }
 
-int Player::get_total_honey() {
+int Player::get_total_honey() const {
     return total_honey;
 }
 
-int Player::get_total_bees() {
+int Player::get_total_bees() const {
     return bees.size();
 }
 
-int Player::get_total_bees_of_type(BeeColor type) {
+int Player::get_total_bees_of_type(BeeColor type) const {
     int total = 0;
     for (Bee bee : bees) {
         total += bee.get_type() == type;
@@ -187,15 +199,15 @@ int Player::get_total_bees_of_type(BeeColor type) {
     return total;
 }
 
-int Player::get_red_pollen_multiplier() {
+int Player::get_red_pollen_multiplier() const {
     return red_pollen_multiplier;
 }
 
-int Player::get_blue_pollen_multiplier() {
+int Player::get_blue_pollen_multiplier() const {
     return blue_pollen_multiplier;
 }
 
-int Player::get_white_pollen_multiplier() {
+int Player::get_white_pollen_multiplier() const {
     return white_pollen_multiplier;
 }
 
@@ -207,19 +219,19 @@ int Player::get_collect_amount() {
     return calculate_collect_amount();
 }
 
-short int Player::get_backpack_upgrades() {
+short int Player::get_backpack_upgrades() const {
     return backpack_upgrades;
 }
 
-short int Player::get_collect_amount_upgrades() {
+short int Player::get_collect_amount_upgrades() const {
     return collect_amount_upgrades;
 }
 
-short int Player::get_honey_per_pollen_upgrades() {
+short int Player::get_honey_per_pollen_upgrades() const {
     return honey_per_pollen_upgrades;
 }
 
-short int Player::get_max_upgrades() {
+short int Player::get_max_upgrades() const {
     return max_upgrades;
 }
 
@@ -253,8 +265,6 @@ int Player::calculate_pollen(PollenCollection collected_pollen) {
 
 PollenCollection Player::collect(int red_flowers, int blue_flowers, int white_flowers) {
     assert(red_flowers + blue_flowers + white_flowers == 32);
-    // BUG: fix this to increse the number accordingly
-    // it now doesn't update the collect amount as it should
 
     int player_collect_amount = calculate_collect_amount();
     int red_pollen = red_flowers + red_flowers * (player_collect_amount / 20);
@@ -278,7 +288,7 @@ void Player::set_honey_per_pollen_upgrades(int amount) {
 }
 
 int Player::calculate_honey_per_pollen() {
-    int h_per_pollen = honey_per_pollen_upgrades;
+    int h_per_pollen = honey_per_pollen + honey_per_pollen_upgrades;
     for (Bee bee : bees) {
         h_per_pollen += bee.get_honey_per_pollen();
     }

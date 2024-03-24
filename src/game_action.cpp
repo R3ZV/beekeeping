@@ -1,5 +1,17 @@
 #include "game_action.h"
 
+std::ostream &operator<<(std::ostream& out, const GameAction& action) {
+    out << "Deelay: " << action.deelay << "\n";
+    out << "Timer: " << action.timer << "\n";
+    out << "Type: " << action.type << "\n";
+    out << "Text: " << action.text << "\n";
+    out << "X: " << action.pos_x << "\n";
+    out << "Y: " << action.pos_y << "\n";
+    out << "Opacity: " << action.opacity << "\n";
+    out << "Font size: " << action.font_size << "\n";
+    return out;
+}
+
 GameAction::GameAction (
     double deelay,
     double timer,
@@ -32,14 +44,6 @@ void GameAction::start_action() {
     }
 }
 
-double GameAction::get_deelay() {
-    return deelay;
-}
-
-double GameAction::get_timer() {
-    return timer;
-}
-
 void GameAction::decrees_opacity(double amount) {
     opacity += amount;
     opacity = std::min(opacity, 255.0);
@@ -48,9 +52,17 @@ void GameAction::move_y(double amount) {
     pos_y -= amount;
 }
 
-double GameAction::get_opacity() {
+double GameAction::get_deelay() const {
+    return deelay;
+}
+
+double GameAction::get_timer()  const {
+    return timer;
+}
+
+double GameAction::get_opacity() const {
     return color.a;
 }
-double GameAction::get_pos_y() {
+double GameAction::get_pos_y() const {
     return pos_y;
 }
