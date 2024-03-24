@@ -5,7 +5,7 @@
     "red_bees": 1,
     "blue_bees": 0,
     "white_bees": 0,
-    "red_pollen_multiplier": 4,
+    "red_pollen_multiplier": 0,
     "blue_pollen_multiplier": 0,
     "white_pollen_multiplier": 0,
     "honey_per_pollen":  1,
@@ -19,8 +19,8 @@
     "bees": [
         {
             "type": 0,
-            "color_multiplier": 4,
-            "honey_per_pollen": 4
+            "color_multiplier": 0,
+            "honey_per_pollen": 0
         }
     ]
 }

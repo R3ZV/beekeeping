@@ -55,6 +55,10 @@ class Player {
     bool save_player_stats();
     friend std::ostream &operator<<(std::ostream &out, const Player &player);
 
+    int calculate_honey_per_pollen();
+    int calculate_backpack_capacity();
+    int calculate_collect_amount();
+
 public:
     Player (
         std::string name,
@@ -104,10 +108,9 @@ public:
     void set_pollen(int amount);
     void set_honey(int amount);
     void set_collect_amount_upgrades(int amount);
-
+    void set_backpack_upgrades(int amount);
+    void set_honey_per_pollen_upgrades(int amount);
     int calculate_pollen(PollenCollection collected_pollen);
-    int calculate_honey_per_pollen();
-    int calculate_collect_amount();
     PollenCollection collect(int red_flowers, int blue_flowers, int white_flowers);
 };
 

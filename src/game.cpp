@@ -87,11 +87,6 @@ void Game::game_lobby() {
         DrawText("7", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
     }
 
-    // TODO:
-    // make it so after you press F a flag is turned on and the player
-    // can select from 7 fields
-    // A field number will appear in the corner denoting what button to press
-    // to go to it
     if (state == GameState::FieldSelection) {
         if (IsKeyPressed(KEY_B)) {
             state = GameState::Lobby;
@@ -117,7 +112,7 @@ void Game::game_lobby() {
         } else if (IsKeyPressed(KEY_S)) {
             state = GameState::Stats;
         } else if (IsKeyPressed(KEY_H)) {
-            int honey = player.get_honey() + player.get_pollen() * player.calculate_honey_per_pollen();
+            int honey = player.get_honey() + player.get_pollen() * player.get_honey_per_pollen();
             player.set_honey(honey);
             player.set_pollen(0);
         } else if (IsKeyPressed(KEY_F)) {
@@ -160,7 +155,7 @@ void Game::game_field() {
         double POLLEN_TEXT_X = std::uniform_real_distribution<>(FIELD_X, FIELD_X + FIELD_WIDTH - 10)(mt);
         double POLLEN_TEXT_Y = std::uniform_real_distribution<>(FIELD_Y, FILED_HEIGHT - 10)(mt);
 
-        PollenCollection collected = player.collect(10, 2, 4);
+        PollenCollection collected = player.collect(10, 2, 20);
         std::string total_pollen = "+" + std::to_string(
                                        collected.get_red_pollen()
                                        + collected.get_blue_pollen()
@@ -220,9 +215,15 @@ void Game::game_upgrades() {
             player.set_honey(player.get_honey() - 100);
         }
     } else if (IsKeyPressed(KEY_TWO)) {
-        std::cout << "TODO\n";
+        if (player.get_honey() >= 100 && player.get_backpack_upgrades() < player.get_max_upgrades()) {
+            player.set_backpack_upgrades(player.get_backpack_upgrades() + 1);
+            player.set_honey(player.get_honey() - 100);
+        }
     } else if (IsKeyPressed(KEY_THREE)) {
-        std::cout << "TODO\n";
+        if (player.get_honey() >= 100 && player.get_honey_per_pollen_upgrades() < player.get_max_upgrades()) {
+            player.set_honey_per_pollen_upgrades(player.get_honey_per_pollen_upgrades() + 1);
+            player.set_honey(player.get_honey() - 100);
+        }
     } else if (IsKeyPressed(KEY_FOUR)) {
         std::cout << "TODO\n";
     }

@@ -26,6 +26,11 @@ public:
     Texture2D get_background();
     Texture2D get_strawberry_icon();
     Texture2D get_sunflower_icon();
+    Texture2D get_clover_icon();
+    Texture2D get_cactus_icon();
+    Texture2D get_cherry_icon();
+    Texture2D get_orange_icon();
+    Texture2D get_blueberry_icon();
     Texture2D get_backpack_upgrade_icon();
     Texture2D get_collect_amount_upgrade_icon();
     Texture2D get_honey_per_pollen_upgrade_icon();
@@ -33,11 +38,6 @@ public:
     Texture2D get_red_bee_face();
     Texture2D get_blue_bee_face();
     Texture2D get_white_bee_face();
-    Texture2D get_clover_icon();
-    Texture2D get_cactus_icon();
-    Texture2D get_cherry_icon();
-    Texture2D get_orange_icon();
-    Texture2D get_blueberry_icon();
 };
 
 #endif // GAME_TEXTURE_H

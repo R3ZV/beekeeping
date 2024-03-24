@@ -164,7 +164,7 @@ int Player::get_pollen() {
 }
 
 int Player::get_backpack_capacity() {
-    return backpack_capacity;
+    return calculate_backpack_capacity();
 }
 
 int Player::get_honey() {
@@ -200,11 +200,11 @@ int Player::get_white_pollen_multiplier() {
 }
 
 int Player::get_honey_per_pollen() {
-    return honey_per_pollen;
+    return calculate_honey_per_pollen();
 }
 
 int Player::get_collect_amount() {
-    return collect_amount;
+    return calculate_collect_amount();
 }
 
 short int Player::get_backpack_upgrades() {
@@ -225,8 +225,9 @@ short int Player::get_max_upgrades() {
 
 void Player::set_pollen(int amount) {
     pollen = amount;
-    pollen = std::min(pollen, backpack_capacity);
-    assert(pollen <= backpack_capacity);
+    int capacity = calculate_backpack_capacity();
+    pollen = std::min(pollen, capacity);
+    assert(pollen <= capacity);
 }
 
 void Player::set_honey(int amount) {
@@ -251,6 +252,7 @@ int Player::calculate_pollen(PollenCollection collected_pollen) {
 }
 
 PollenCollection Player::collect(int red_flowers, int blue_flowers, int white_flowers) {
+    assert(red_flowers + blue_flowers + white_flowers == 32);
     // BUG: fix this to increse the number accordingly
     // it now doesn't update the collect amount as it should
 
@@ -266,10 +268,24 @@ void Player::set_collect_amount_upgrades(int amount) {
     assert(collect_amount_upgrades <= max_upgrades);
 }
 
+void Player::set_backpack_upgrades(int amount) {
+    backpack_upgrades = amount;
+    assert(backpack_upgrades <= max_upgrades);
+}
+void Player::set_honey_per_pollen_upgrades(int amount) {
+    honey_per_pollen_upgrades = amount;
+    assert(honey_per_pollen <= max_upgrades);
+}
+
 int Player::calculate_honey_per_pollen() {
     int h_per_pollen = honey_per_pollen_upgrades;
     for (Bee bee : bees) {
         h_per_pollen += bee.get_honey_per_pollen();
     }
     return h_per_pollen;
+}
+
+int Player::calculate_backpack_capacity() {
+    int capacity = backpack_capacity + backpack_capacity * backpack_upgrades;
+    return capacity;
 }
