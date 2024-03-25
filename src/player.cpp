@@ -277,18 +277,46 @@ PollenCollection Player::collect(int red_flowers, int blue_flowers, int white_fl
     return PollenCollection(red_pollen, blue_pollen, white_pollen);
 }
 
-void Player::set_collect_amount_upgrades(int amount) {
-    collect_amount_upgrades = amount;
-    assert(collect_amount_upgrades <= max_upgrades);
+
+void Player::set_upgrade(PlayerUpgrade upgrade_type, int amount) {
+    assert(amount <= max_upgrades);
+    switch(upgrade_type) {
+    case PlayerUpgrade::CollectAmount:
+        collect_amount_upgrades = amount;
+        break;
+
+    case PlayerUpgrade::BackpackCapacity:
+        backpack_upgrades = amount;
+        break;
+
+    case PlayerUpgrade::HoneyPerPollen:
+        honey_per_pollen_upgrades = amount;
+        break;
+
+    case PlayerUpgrade::Bee:
+        std::cout << "TODO\n";
+        break;
+    }
 }
 
-void Player::set_backpack_upgrades(int amount) {
-    backpack_upgrades = amount;
-    assert(backpack_upgrades <= max_upgrades);
-}
-void Player::set_honey_per_pollen_upgrades(int amount) {
-    honey_per_pollen_upgrades = amount;
-    assert(honey_per_pollen <= max_upgrades);
+short int Player::get_total_upgrade(PlayerUpgrade upgrade_type) {
+    switch(upgrade_type) {
+    case PlayerUpgrade::CollectAmount:
+        return collect_amount_upgrades;
+        break;
+
+    case PlayerUpgrade::BackpackCapacity:
+        return backpack_upgrades;
+        break;
+
+    case PlayerUpgrade::HoneyPerPollen:
+        return honey_per_pollen_upgrades;
+        break;
+
+    case PlayerUpgrade::Bee:
+        return (int)bees.size();
+        break;
+    }
 }
 
 int Player::calculate_honey_per_pollen() {

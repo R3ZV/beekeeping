@@ -230,49 +230,69 @@ void Game::game_upgrades() {
     const int POS_X_MARGIN = 50;
     const int POS_Y_MARGIN = 100;
     const int gap = 10;
+    const int COLS = 2;
 
-    int pos_x = WIDTH / 2 - CARD_WIDTH - POS_X_MARGIN / 2, pos_y = 200;
-    DrawTexture(assets->get_collect_amount_upgrade_icon(), pos_x, pos_y, WHITE);
-    DrawText("1", pos_x + gap, pos_y + gap, 20, BLACK);
-    DrawText("100 H", pos_x + CARD_WIDTH / 2 - MeasureText("100 H", 20), pos_y + CARD_HEIGHT + gap, 20, BLACK);
+    std::vector<Upgrade> upgrades;
+    upgrades.push_back(Upgrade(100,
+                               player.get_upgrade(PlayerUpgrade::CollectAmount),
+                               assets->get_collect_amount_upgrade_icon()
+                              ));
 
-    pos_x += CARD_WIDTH + POS_X_MARGIN;
+    upgrades.push_back(Upgrade(100,
+                               player.get_upgrade(PlayerUpgrade::BackpackCapacity),
+                               assets->get_backpack_upgrade_icon()
+                              ));
 
-    DrawTexture(assets->get_backpack_upgrade_icon(), pos_x, pos_y, WHITE);
-    DrawText("2", pos_x + gap, pos_y + gap, 20, BLACK);
-    DrawText("100 H", pos_x + CARD_WIDTH / 2 - MeasureText("100 H", 20), pos_y + CARD_HEIGHT + gap, 20, BLACK);
+    upgrades.push_back(Upgrade(100,
+                               player.get_upgrade(PlayerUpgrade::HoneyPerPollen),
+                               assets->get_honey_per_pollen_upgrade_icon()
+                              ));
 
-    pos_y += CARD_HEIGHT + POS_Y_MARGIN;
-    pos_x = WIDTH / 2 - CARD_WIDTH - POS_X_MARGIN / 2;
+    upgrades.push_back(Upgrade(100,
+                               player.get_upgrade(PlayerUpgrade::Bee),
+                               assets->get_bee_egg_icon()
+                              ));
 
-    DrawTexture(assets->get_honey_per_pollen_upgrade_icon(), pos_x, pos_y, WHITE);
-    DrawText("3", pos_x + gap, pos_y + gap, 20, BLACK);
-    DrawText("100 H", pos_x + CARD_WIDTH / 2 - MeasureText("100 H", 20), pos_y + CARD_HEIGHT + gap, 20, BLACK);
-    pos_x += CARD_WIDTH + POS_X_MARGIN;
+    const int POS_X = WIDTH / 2 - CARD_WIDTH - POS_X_MARGIN / 2, POS_Y = 200;
+    for (int i = 0; i < (int)upgrades.size(); ++i) {
+        int pos_x = POS_X + (CARD_WIDTH + POS_X_MARGIN) * (i % COLS);
+        int pos_y = POS_Y + (CARD_HEIGHT + POS_Y_MARGIN) * (i / COLS);
 
-    DrawTexture(assets->get_bee_egg_icon(), pos_x, pos_y, WHITE);
-    DrawText("4", pos_x + gap, pos_y + gap, 20, BLACK);
-    DrawText("100 H", pos_x + CARD_WIDTH / 2 - MeasureText("100 H", 20), pos_y + CARD_HEIGHT + gap, 20, BLACK);
+        DrawTexture(upgrades[i].get_icon(), pos_x, pos_y, WHITE);
+
+        char buffer[50];
+        sprintf(buffer, "%d", i + 1);
+        DrawText(buffer,
+                 pos_x + gap,
+                 pos_y + gap,
+                 20, BLACK);
+
+        sprintf(buffer, "%d H", upgrades[i].get_upgrades());
+        DrawText(buffer,
+                 pos_x + CARD_WIDTH / 2 - MeasureText(buffer, 20),
+                 pos_y + CARD_HEIGHT + gap,
+                 20, BLACK);
+    }
+
+    std::vector<KeyboardKey> upgrade_keys;
+    upgrade_keys.push_back(KEY_ONE);
+    upgrade_keys.push_back(KEY_TWO);
+    upgrade_keys.push_back(KEY_THREE);
+    upgrade_keys.push_back(KEY_FOUR);
 
     if (IsKeyPressed(KEY_B)) {
         state = GameState::Lobby;
-    } else if (IsKeyPressed(KEY_ONE)) {
-        if (player.get_honey() >= 100 && player.get_collect_amount_upgrades() < player.get_max_upgrades()) {
-            player.set_collect_amount_upgrades(player.get_collect_amount_upgrades() + 1);
-            player.set_honey(player.get_honey() - 100);
+    } else {
+        for (int i = 0; i < (int)upgrade_keys.size(); ++i) {
+            if (IsKeyPressed(upgrade_keys[i])) {
+                if (player.get_honey() >= upgrades[i].get_price() &&
+                        upgrades[i].get_upgrades() < player.get_max_upgrades()) {
+
+                    player.set_honey(player.get_honey() - upgrades[i].get_price());
+                    player.set_upgrade(upgrades[i].get_upgrade_type(), upgrades[i].get_upgrades() + 1);
+                }
+            }
         }
-    } else if (IsKeyPressed(KEY_TWO)) {
-        if (player.get_honey() >= 100 && player.get_backpack_upgrades() < player.get_max_upgrades()) {
-            player.set_backpack_upgrades(player.get_backpack_upgrades() + 1);
-            player.set_honey(player.get_honey() - 100);
-        }
-    } else if (IsKeyPressed(KEY_THREE)) {
-        if (player.get_honey() >= 100 && player.get_honey_per_pollen_upgrades() < player.get_max_upgrades()) {
-            player.set_honey_per_pollen_upgrades(player.get_honey_per_pollen_upgrades() + 1);
-            player.set_honey(player.get_honey() - 100);
-        }
-    } else if (IsKeyPressed(KEY_FOUR)) {
-        std::cout << "TODO\n";
     }
 }
 
@@ -329,15 +349,15 @@ void Game::game_stats() {
     DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
     row++;
 
-    std::sprintf(buffer, "Backpack upgrades: %d", player.get_backpack_upgrades());
+    std::sprintf(buffer, "Backpack upgrades: %d", player.get_total_upgrade(PlayerUpgrade::BackpackCapacity));
     DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
     row++;
 
-    std::sprintf(buffer, "Collect amount upgrades: %d", player.get_collect_amount_upgrades());
+    std::sprintf(buffer, "Collect amount upgrades: %d", player.get_total_upgrade(PlayerUpgrade::CollectAmount));
     DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
     row++;
 
-    std::sprintf(buffer, "Honey per pollen upgrades: %d", player.get_honey_per_pollen_upgrades());
+    std::sprintf(buffer, "Honey per pollen upgrades: %d", player.get_total_upgrade(PlayerUpgrade::HoneyPerPollen));
     DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
     row++;
 

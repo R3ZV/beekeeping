@@ -3,6 +3,7 @@
 
 #include "player.h"
 #include "game_action.h"
+#include "upgrade.h"
 #include "asset_manager.h"
 #include "field.h"
 
