@@ -159,6 +159,34 @@ void Game::game_field() {
         }
     }
 
+    // bees
+    std::vector<Bee> bees = player.get_bees();
+    const int GAP = 20;
+    const int SPRITE_WIDTH = 64;
+    const int SPRITE_HEIGHT = 88;
+    const int COLS = 4;
+    for (int i = 0; i < (int)bees.size(); ++i) {
+        if (bees[i].get_type() == BeeColor::Red) {
+            DrawTexture(
+                assets->get_red_bee_face(),
+                WIDTH - 364 + (SPRITE_WIDTH + GAP) * (i % COLS),
+                100 + (SPRITE_HEIGHT + GAP) * (i / COLS),
+                WHITE);
+        } else if (bees[i].get_type() == BeeColor::Blue) {
+            DrawTexture(
+                assets->get_blue_bee_face(),
+                WIDTH - 364 + (SPRITE_WIDTH + GAP) * (i % COLS),
+                100 + (SPRITE_HEIGHT + GAP) * (i / COLS),
+                WHITE);
+        } else {
+            DrawTexture(
+                assets->get_white_bee_face(),
+                WIDTH - 364 + (SPRITE_WIDTH + GAP) * (i % COLS),
+                100 + (SPRITE_HEIGHT + GAP) * (i / COLS),
+                WHITE);
+        }
+    }
+
     if (IsKeyPressed(KEY_B)) {
         state = GameState::Lobby;
     } else if (IsKeyPressed(KEY_SPACE)) {

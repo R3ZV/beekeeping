@@ -97,6 +97,8 @@ public:
     int get_blue_pollen_multiplier() const;
     int get_white_pollen_multiplier() const;
 
+    std::vector<Bee> get_bees() const;
+
     int get_backpack_capacity();
     int get_honey_per_pollen();
     int get_collect_amount();

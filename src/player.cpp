@@ -235,6 +235,10 @@ short int Player::get_max_upgrades() const {
     return max_upgrades;
 }
 
+std::vector<Bee> Player::get_bees() const {
+    return bees;
+}
+
 void Player::set_pollen(int amount) {
     pollen = amount;
     int capacity = calculate_backpack_capacity();
