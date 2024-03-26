@@ -99,22 +99,14 @@ void Game::game_lobby() {
     if (state == GameState::FieldSelection) {
         if (IsKeyPressed(KEY_B)) {
             state = GameState::Lobby;
-        } else if (IsKeyPressed(KEY_ONE)) {
-            state = GameState::StrawberryField;
-        } else if (IsKeyPressed(KEY_TWO)) {
-            state = GameState::SunflowerField;
-        } else if (IsKeyPressed(KEY_THREE)) {
-            state = GameState::CloverField;
-        } else if (IsKeyPressed(KEY_FOUR)) {
-            state = GameState::CactusField;
-        } else if (IsKeyPressed(KEY_FIVE)) {
-            state = GameState::CherryField;
-        } else if (IsKeyPressed(KEY_SIX)) {
-            state = GameState::OrangeField;
-        } else if (IsKeyPressed(KEY_SEVEN)) {
-            state = GameState::BlueberryField;
+        } else {
+            int key_pressed = GetKeyPressed();
+            if (key_pressed >= KEY_ONE && key_pressed <= KEY_SEVEN) {
+                key_pressed -= KEY_ONE;
+                GameState new_state = static_cast<GameState>(key_pressed);
+                state = new_state;
+            }
         }
-
     } else {
         if (IsKeyPressed(KEY_U)) {
             state = GameState::Upgrades;
@@ -267,17 +259,11 @@ void Game::game_upgrades() {
                  20, BLACK);
     }
 
-    std::vector<KeyboardKey> upgrade_keys;
-    upgrade_keys.push_back(KEY_ONE);
-    upgrade_keys.push_back(KEY_TWO);
-    upgrade_keys.push_back(KEY_THREE);
-    upgrade_keys.push_back(KEY_FOUR);
-
     if (IsKeyPressed(KEY_B)) {
         state = GameState::Lobby;
     } else {
-        for (int i = 0; i < (int)upgrade_keys.size(); ++i) {
-            if (IsKeyPressed(upgrade_keys[i])) {
+        for (int i = 0; i < (int)upgrades.size(); ++i) {
+            if (IsKeyPressed(KEY_ONE + i)) {
                 upgrades[i]->purchase(player);
             }
         }

@@ -49,12 +49,13 @@ void BeeUpgrade::purchase(Player& player) const {
     if (player.get_honey() >= get_price() && get_upgrades() < player.get_max_upgrades()) {
         player.set_honey(player.get_honey() - get_price());
 
-        std::default_random_engine generator;
+        std::random_device generator;
         std::uniform_int_distribution<int> type_distibution(0, 2);
         std::uniform_int_distribution<int> stats_distibution(1, 5);
 
         BeeColor bee_type = BeeColor::Red;
         int bee_type_id = type_distibution(generator);
+
         if (bee_type_id == 1) {
             bee_type = BeeColor::Blue;
         } else if (bee_type_id == 2) {
