@@ -7,9 +7,9 @@
 enum BeeColor { Red, Blue, White };
 
 class Bee {
-    const BeeColor type;
-    const short int color_multiplier;
-    const short int honey_per_pollen;
+    BeeColor type;
+    short int color_multiplier;
+    short int honey_per_pollen;
 
     friend std::ostream &operator<<(std::ostream &out, const Bee &bee);
 

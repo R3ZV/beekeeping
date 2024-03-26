@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <random>
 
 #include "bee.h"
 #include "nlohmann/json.hpp"
@@ -26,7 +27,7 @@ enum PlayerUpgrade {
     CollectAmount,
     BackpackCapacity,
     HoneyPerPollen,
-    Bee
+    NewBee
 };
 
 class Player {
@@ -110,12 +111,19 @@ public:
     int get_honey_per_pollen();
     int get_collect_amount();
 
-    short int get_total_upgrade(PlayerUpgrade upgrade_type);
+    short int get_collect_amount_upgrades() const;
+    short int get_backpack_upgrades() const;
+    short int get_honey_per_pollen_upgrades() const;
+    short int get_total_upgrades(PlayerUpgrade upgrade_type);
     short int get_max_upgrades() const;
 
     void set_pollen(int amount);
     void set_honey(int amount);
-    void set_upgrade(PlayerUpgrade type, int amount);
+    void set_collect_amount_upgrades(int amount);
+    void set_backpack_upgrades(int amount);
+    void set_honey_per_pollen_upgrades(int amount);
+    void set_bees(Bee bee);
+
     int calculate_pollen(PollenCollection collected_pollen);
     PollenCollection collect(int red_flowers, int blue_flowers, int white_flowers);
 };

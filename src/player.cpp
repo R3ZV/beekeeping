@@ -277,29 +277,7 @@ PollenCollection Player::collect(int red_flowers, int blue_flowers, int white_fl
     return PollenCollection(red_pollen, blue_pollen, white_pollen);
 }
 
-
-void Player::set_upgrade(PlayerUpgrade upgrade_type, int amount) {
-    assert(amount <= max_upgrades);
-    switch(upgrade_type) {
-    case PlayerUpgrade::CollectAmount:
-        collect_amount_upgrades = amount;
-        break;
-
-    case PlayerUpgrade::BackpackCapacity:
-        backpack_upgrades = amount;
-        break;
-
-    case PlayerUpgrade::HoneyPerPollen:
-        honey_per_pollen_upgrades = amount;
-        break;
-
-    case PlayerUpgrade::Bee:
-        std::cout << "TODO\n";
-        break;
-    }
-}
-
-short int Player::get_total_upgrade(PlayerUpgrade upgrade_type) {
+short int Player::get_total_upgrades(PlayerUpgrade upgrade_type) {
     switch(upgrade_type) {
     case PlayerUpgrade::CollectAmount:
         return collect_amount_upgrades;
@@ -313,10 +291,12 @@ short int Player::get_total_upgrade(PlayerUpgrade upgrade_type) {
         return honey_per_pollen_upgrades;
         break;
 
-    case PlayerUpgrade::Bee:
-        return (int)bees.size();
+    case PlayerUpgrade::NewBee:
+        return bees.size();
         break;
     }
+    // TODO: remove this
+    return 0;
 }
 
 int Player::calculate_honey_per_pollen() {
@@ -330,4 +310,29 @@ int Player::calculate_honey_per_pollen() {
 int Player::calculate_backpack_capacity() {
     int capacity = backpack_capacity + backpack_capacity * backpack_upgrades;
     return capacity;
+}
+
+void Player::set_collect_amount_upgrades(int amount) {
+    assert(amount <= max_upgrades);
+    collect_amount_upgrades = amount;
+}
+
+void Player::set_backpack_upgrades(int amount) {
+    assert(amount <= max_upgrades);
+    backpack_upgrades = amount;
+}
+
+void Player::set_honey_per_pollen_upgrades(int amount) {
+    assert(amount <= max_upgrades);
+    honey_per_pollen_upgrades = amount;
+}
+
+void Player::set_bees(Bee bee) {
+    if ((int)bees.size() == max_upgrades) {
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> index(0, (int)bees.size() - 1);
+        int idx = index(generator);
+        bees.erase(bees.begin() + idx);
+    }
+    bees.push_back(bee);
 }

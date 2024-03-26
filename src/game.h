@@ -8,9 +8,10 @@
 #include "field.h"
 
 #include <string>
-#include <queue>
+#include <vector>
 #include <raylib.h>
 #include <random>
+#include <memory>
 
 #define WIDTH 1024
 #define HEIGHT 800

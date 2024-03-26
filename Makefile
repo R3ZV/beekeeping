@@ -1,5 +1,5 @@
 CC := g++
-CFLAGS := -std=c++11 -Wall -Wextra
+CFLAGS := -std=c++14 -Wall -Wextra
 LDFLAGS := -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 INCLUDES := -I/usr/local/include
 LIBRARIES := -L/usr/local/lib
