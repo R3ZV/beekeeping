@@ -182,6 +182,7 @@ void Game::game_field() {
     if (IsKeyPressed(KEY_B)) {
         state = GameState::Lobby;
     } else if (IsKeyPressed(KEY_SPACE)) {
+        PlaySound(assets->get_collect_sound());
         std::random_device rd;
         std::mt19937 mt(rd());
         double POLLEN_TEXT_X = std::uniform_real_distribution<>(FIELD_X, FIELD_X + FIELD_WIDTH - 10)(mt);
@@ -264,6 +265,7 @@ void Game::game_upgrades() {
     } else {
         for (int i = 0; i < (int)upgrades.size(); ++i) {
             if (IsKeyPressed(KEY_ONE + i)) {
+                PlaySound(assets->get_purchase_sound());
                 upgrades[i]->purchase(player);
             }
         }

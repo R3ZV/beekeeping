@@ -14,9 +14,11 @@ int main() {
 
     auto textures = std::make_shared<AssetManager>();
     Game game = Game(MainMenu, player, textures, {});
+    Music ambient = LoadMusicStream("./assets/ambient.mp3");
     std::cout << "DBG:\n";
     std::cout << game << "\n";
     while (!WindowShouldClose()) {
+        PlayMusicStream(ambient);
         BeginDrawing();
         game.draw_state();
         EndDrawing();
