@@ -7,6 +7,7 @@
 
 int main() {
     std::unique_ptr<Player> player;
+
     try {
         player = std::make_unique<Player>(Player::load_stats());
     } catch (FileNotFound &err) {
