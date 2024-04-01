@@ -29,6 +29,8 @@ class AssetManager {
     Texture2D blue_bee_face;
     Texture2D white_bee_face;
 
+    Sound ambient;
+    Sound honey_sold_sound;
     Sound collect_sound;
     Sound egg_hatch_sound;
     Sound purchase_sound;
@@ -61,6 +63,8 @@ public:
     Sound get_collect_sound();
     Sound get_egg_hatch_sound();
     Sound get_purchase_sound();
+    Sound get_honey_sold_sound();
+    Sound get_ambient();
 };
 
 #endif // GAME_TEXTURE_H

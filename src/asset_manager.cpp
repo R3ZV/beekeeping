@@ -26,6 +26,8 @@ AssetManager::AssetManager() {
     collect_sound = LoadSound("./assets/collect.wav");
     purchase_sound = LoadSound("./assets/purchase.wav");
     egg_hatch_sound = LoadSound("./assets/bee-hatch.wav");
+    honey_sold_sound = LoadSound("./assets/honey.mp3");
+    ambient = LoadSound("./assets/ambient.mp3");
 }
 
 AssetManager::~AssetManager() {
@@ -55,6 +57,7 @@ AssetManager::~AssetManager() {
     UnloadSound(collect_sound);
     UnloadSound(purchase_sound);
     UnloadSound(egg_hatch_sound);
+    UnloadSound(honey_sold_sound);
 }
 
 Texture2D AssetManager::get_background() const {
@@ -155,4 +158,12 @@ Sound AssetManager::get_egg_hatch_sound() {
 
 Sound AssetManager::get_purchase_sound() {
     return purchase_sound;
+}
+
+Sound AssetManager::get_honey_sold_sound() {
+    return honey_sold_sound;
+}
+
+Sound AssetManager::get_ambient() {
+    return ambient;
 }

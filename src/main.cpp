@@ -20,9 +20,19 @@ int main() {
 
     auto textures = std::make_shared<AssetManager>();
     Game game = Game(MainMenu, *player, textures, {});
-    Music ambient = LoadMusicStream("./assets/ambient.mp3");
+
+    bool is_playing = false;
+    double start_timer;
     while (!WindowShouldClose()) {
-        PlayMusicStream(ambient);
+        if (!is_playing) {
+            start_timer = GetTime();
+            PlaySound(assets->get_ambient());
+            SetSoundVolume(assets->get_ambient(), 0.2);
+            is_playing = true;
+        }
+        if (GetTime() - start_timer > 74) {
+            is_playing = false;
+        }
         BeginDrawing();
         game.draw_state();
         EndDrawing();

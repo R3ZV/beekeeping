@@ -102,6 +102,7 @@ void Game::game_lobby() {
         } else if (IsKeyPressed(KEY_S)) {
             state = GameState::Stats;
         } else if (IsKeyPressed(KEY_H)) {
+            PlaySound(assets->get_honey_sold_sound());
             int honey = player.get_honey() + player.get_pollen() * player.get_honey_per_pollen();
             player.set_honey(honey);
             player.set_pollen(0);
@@ -251,7 +252,11 @@ void Game::game_upgrades() {
     } else {
         for (int i = 0; i < (int)upgrades.size(); ++i) {
             if (IsKeyPressed(KEY_ONE + i)) {
-                PlaySound(assets->get_purchase_sound());
+                if (IsKeyPressed(KEY_FOUR)) {
+                    PlaySound(assets->get_egg_hatch_sound());
+                } else {
+                    PlaySound(assets->get_purchase_sound());
+                }
                 upgrades[i]->purchase(player);
             }
         }
