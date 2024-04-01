@@ -21,7 +21,6 @@ class GameAction {
     Color color;
     double opacity;
 public:
-    friend std::ostream &operator<<(std::ostream& out, const GameAction& action);
     GameAction(
         double deelay,
         double timer,

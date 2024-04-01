@@ -33,9 +33,7 @@ class AssetManager {
     Sound egg_hatch_sound;
     Sound purchase_sound;
 public:
-    friend std::ostream &operator<<(std::ostream &out, const AssetManager &manager);
-    AssetManager ();
-    AssetManager (const AssetManager& other);
+    AssetManager();
     ~AssetManager();
     Texture2D get_background() const;
     Texture2D get_strawberry_icon() const;
