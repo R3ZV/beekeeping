@@ -1,76 +1,33 @@
 #include "asset_manager.h"
 
-std::ostream &operator<<(std::ostream &out, const AssetManager &manager) {
-    out << "Loaded: " << manager.loaded_textures << " textures\n";
-    return out;
-}
-
 AssetManager::AssetManager() {
     background = LoadTexture("./assets/background.png");
-    loaded_textures++;
-
     strawberry_icon = LoadTexture("./assets/strawberry_icon.png");
-    loaded_textures++;
-
     strawberry_field = LoadTexture("./assets/strawberry_field.png");
-    loaded_textures++;
-
     sunflower_icon = LoadTexture("./assets/sunflower_icon.png");
-    loaded_textures++;
-
     sunflower_field = LoadTexture("./assets/sunflower_field.png");
-    loaded_textures++;
-
     clover_icon = LoadTexture("./assets/clover_icon.png");
-    loaded_textures++;
-
     clover_field = LoadTexture("./assets/clover_field.png");
-    loaded_textures++;
-
     cactus_icon = LoadTexture("./assets/cactus_icon.png");
-    loaded_textures++;
-
     cactus_field = LoadTexture("./assets/cactus_field.png");
-    loaded_textures++;
-
     cherry_icon = LoadTexture("./assets/cherry_icon.png");
-    loaded_textures++;
-
     cherry_field = LoadTexture("./assets/cherry_field.png");
-    loaded_textures++;
-
     orange_icon = LoadTexture("./assets/orange_icon.png");
-    loaded_textures++;
-
     orange_field = LoadTexture("./assets/orange_field.png");
-    loaded_textures++;
-
     blueberry_icon = LoadTexture("./assets/blueberry_icon.png");
-    loaded_textures++;
-
     blueberry_field = LoadTexture("./assets/blueberry_field.png");
-    loaded_textures++;
-
     backpack_upgrade_icon = LoadTexture("./assets/backpack_capacity.png");
-    loaded_textures++;
-
     collect_amount_upgrade_icon = LoadTexture("./assets/collect_amount.png");
-    loaded_textures++;
-
     honey_per_pollen_upgrade_icon = LoadTexture("./assets/honey_per_pollen.png");
-    loaded_textures++;
-
     bee_egg_icon = LoadTexture("./assets/bee_egg.png");
-    loaded_textures++;
-
     red_bee_face = LoadTexture("./assets/red_bee.png");
-    loaded_textures++;
-
     blue_bee_face = LoadTexture("./assets/blue_bee.png");
-    loaded_textures++;
-
     white_bee_face = LoadTexture("./assets/white_bee.png");
-    loaded_textures++;
+    collect_sound = LoadSound("./assets/collect.wav");
+    purchase_sound = LoadSound("./assets/purchase.wav");
+    egg_hatch_sound = LoadSound("./assets/bee-hatch.wav");
+    honey_sold_sound = LoadSound("./assets/honey.mp3");
+    ambient = LoadSound("./assets/ambient.mp3");
 }
 
 AssetManager::~AssetManager() {
@@ -96,19 +53,11 @@ AssetManager::~AssetManager() {
     UnloadTexture(red_bee_face);
     UnloadTexture(blue_bee_face);
     UnloadTexture(white_bee_face);
-}
 
-AssetManager::AssetManager (const AssetManager& other) {
-    background = other.background;
-    strawberry_icon = other.strawberry_icon;
-    sunflower_icon = other.sunflower_icon;
-    backpack_upgrade_icon = other.backpack_upgrade_icon;
-    collect_amount_upgrade_icon = other.collect_amount_upgrade_icon;
-    honey_per_pollen_upgrade_icon = other.honey_per_pollen_upgrade_icon;
-    bee_egg_icon = other.bee_egg_icon;
-    red_bee_face = other.red_bee_face;
-    blue_bee_face = other.blue_bee_face;
-    white_bee_face = other.white_bee_face;
+    UnloadSound(collect_sound);
+    UnloadSound(purchase_sound);
+    UnloadSound(egg_hatch_sound);
+    UnloadSound(honey_sold_sound);
 }
 
 Texture2D AssetManager::get_background() const {
@@ -197,4 +146,24 @@ Texture2D AssetManager::get_blue_bee_face() const {
 
 Texture2D AssetManager::get_white_bee_face() const {
     return white_bee_face;
+}
+
+Sound AssetManager::get_collect_sound() {
+    return collect_sound;
+}
+
+Sound AssetManager::get_egg_hatch_sound() {
+    return egg_hatch_sound;
+}
+
+Sound AssetManager::get_purchase_sound() {
+    return purchase_sound;
+}
+
+Sound AssetManager::get_honey_sold_sound() {
+    return honey_sold_sound;
+}
+
+Sound AssetManager::get_ambient() {
+    return ambient;
 }

@@ -5,7 +5,7 @@
 #include <raylib.h>
 
 class AssetManager {
-    int loaded_textures;
+    int loaded_assets;
     Texture2D background;
     Texture2D strawberry_icon;
     Texture2D strawberry_field;
@@ -28,10 +28,14 @@ class AssetManager {
     Texture2D red_bee_face;
     Texture2D blue_bee_face;
     Texture2D white_bee_face;
+
+    Sound ambient;
+    Sound honey_sold_sound;
+    Sound collect_sound;
+    Sound egg_hatch_sound;
+    Sound purchase_sound;
 public:
-    friend std::ostream &operator<<(std::ostream &out, const AssetManager &manager);
-    AssetManager ();
-    AssetManager (const AssetManager& other);
+    AssetManager();
     ~AssetManager();
     Texture2D get_background() const;
     Texture2D get_strawberry_icon() const;
@@ -55,6 +59,12 @@ public:
     Texture2D get_red_bee_face() const;
     Texture2D get_blue_bee_face() const;
     Texture2D get_white_bee_face() const;
+
+    Sound get_collect_sound();
+    Sound get_egg_hatch_sound();
+    Sound get_purchase_sound();
+    Sound get_honey_sold_sound();
+    Sound get_ambient();
 };
 
 #endif // GAME_TEXTURE_H

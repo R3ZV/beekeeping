@@ -1,16 +1,5 @@
 #include "game.h"
 
-std::ostream &operator<<(std::ostream& out, const Game& game) {
-    out << "Game state: \n" << game.state;
-    out << "\n";
-
-    out << "Player: \n" << game.player;
-    out << "\n";
-
-    out << "Assets:\n " << *game.assets;
-    return out;
-}
-
 void Game::game_main_menu() {
     ClearBackground(RAYWHITE);
     DrawTexture(assets->get_background(), 0, 0, RAYWHITE);
@@ -99,28 +88,21 @@ void Game::game_lobby() {
     if (state == GameState::FieldSelection) {
         if (IsKeyPressed(KEY_B)) {
             state = GameState::Lobby;
-        } else if (IsKeyPressed(KEY_ONE)) {
-            state = GameState::StrawberryField;
-        } else if (IsKeyPressed(KEY_TWO)) {
-            state = GameState::SunflowerField;
-        } else if (IsKeyPressed(KEY_THREE)) {
-            state = GameState::CloverField;
-        } else if (IsKeyPressed(KEY_FOUR)) {
-            state = GameState::CactusField;
-        } else if (IsKeyPressed(KEY_FIVE)) {
-            state = GameState::CherryField;
-        } else if (IsKeyPressed(KEY_SIX)) {
-            state = GameState::OrangeField;
-        } else if (IsKeyPressed(KEY_SEVEN)) {
-            state = GameState::BlueberryField;
+        } else {
+            int key_pressed = GetKeyPressed();
+            if (key_pressed >= KEY_ONE && key_pressed <= KEY_SEVEN) {
+                key_pressed -= KEY_ONE;
+                GameState new_state = static_cast<GameState>(key_pressed);
+                state = new_state;
+            }
         }
-
     } else {
         if (IsKeyPressed(KEY_U)) {
             state = GameState::Upgrades;
         } else if (IsKeyPressed(KEY_S)) {
             state = GameState::Stats;
         } else if (IsKeyPressed(KEY_H)) {
+            PlaySound(assets->get_honey_sold_sound());
             int honey = player.get_honey() + player.get_pollen() * player.get_honey_per_pollen();
             player.set_honey(honey);
             player.set_pollen(0);
@@ -144,7 +126,6 @@ void Game::game_field() {
     const int FILED_HEIGHT = 256;
     std::vector<Field> fields = Field::all_fields(assets);
     Field current_field = fields[state];
-    std::cout << "Field has following properties: \n" << current_field << "\n";
     DrawTexture(current_field.get_field(), FIELD_X, FIELD_Y, WHITE);
 
     for (int i = 0; i < (int)actions.size(); ++i) {
@@ -190,6 +171,7 @@ void Game::game_field() {
     if (IsKeyPressed(KEY_B)) {
         state = GameState::Lobby;
     } else if (IsKeyPressed(KEY_SPACE)) {
+        PlaySound(assets->get_collect_sound());
         std::random_device rd;
         std::mt19937 mt(rd());
         double POLLEN_TEXT_X = std::uniform_real_distribution<>(FIELD_X, FIELD_X + FIELD_WIDTH - 10)(mt);
@@ -200,8 +182,6 @@ void Game::game_field() {
                                          current_field.get_blue_flowers(),
                                          current_field.get_white_flowers()
                                      );
-        std::cout << "From the field with: " << current_field << "\n";
-        std::cout << "Collected: " << collected << "\n";
         std::string total_pollen = "+" + std::to_string(
                                        collected.get_red_pollen()
                                        + collected.get_blue_pollen()
@@ -230,49 +210,56 @@ void Game::game_upgrades() {
     const int POS_X_MARGIN = 50;
     const int POS_Y_MARGIN = 100;
     const int gap = 10;
+    const int COLS = 2;
 
-    int pos_x = WIDTH / 2 - CARD_WIDTH - POS_X_MARGIN / 2, pos_y = 200;
-    DrawTexture(assets->get_collect_amount_upgrade_icon(), pos_x, pos_y, WHITE);
-    DrawText("1", pos_x + gap, pos_y + gap, 20, BLACK);
-    DrawText("100 H", pos_x + CARD_WIDTH / 2 - MeasureText("100 H", 20), pos_y + CARD_HEIGHT + gap, 20, BLACK);
+    std::vector<std::unique_ptr<Upgrade>> upgrades;
+    upgrades.push_back(std::make_unique<CollectAmountUpgrade>(100,
+                       player.get_total_upgrades(PlayerUpgrade::CollectAmount),
+                       assets->get_collect_amount_upgrade_icon()));
+    upgrades.push_back(std::make_unique<BackpackUpgrade>(100,
+                       player.get_total_upgrades(PlayerUpgrade::BackpackCapacity),
+                       assets->get_backpack_upgrade_icon()));
+    upgrades.push_back(std::make_unique<HoneyPerPollenUpgrade>(100,
+                       player.get_total_upgrades(PlayerUpgrade::HoneyPerPollen),
+                       assets->get_honey_per_pollen_upgrade_icon()));
+    upgrades.push_back(std::make_unique<BeeUpgrade>(100,
+                       player.get_total_upgrades(PlayerUpgrade::NewBee),
+                       assets->get_bee_egg_icon()));
 
-    pos_x += CARD_WIDTH + POS_X_MARGIN;
+    const int POS_X = WIDTH / 2 - CARD_WIDTH - POS_X_MARGIN / 2, POS_Y = 200;
+    for (int i = 0; i < (int)upgrades.size(); ++i) {
+        int pos_x = POS_X + (CARD_WIDTH + POS_X_MARGIN) * (i % COLS);
+        int pos_y = POS_Y + (CARD_HEIGHT + POS_Y_MARGIN) * (i / COLS);
 
-    DrawTexture(assets->get_backpack_upgrade_icon(), pos_x, pos_y, WHITE);
-    DrawText("2", pos_x + gap, pos_y + gap, 20, BLACK);
-    DrawText("100 H", pos_x + CARD_WIDTH / 2 - MeasureText("100 H", 20), pos_y + CARD_HEIGHT + gap, 20, BLACK);
+        DrawTexture(upgrades[i]->get_icon(), pos_x, pos_y, WHITE);
 
-    pos_y += CARD_HEIGHT + POS_Y_MARGIN;
-    pos_x = WIDTH / 2 - CARD_WIDTH - POS_X_MARGIN / 2;
+        char buffer[50];
+        sprintf(buffer, "%d", i + 1);
+        DrawText(buffer,
+                 pos_x + gap,
+                 pos_y + gap,
+                 20, BLACK);
 
-    DrawTexture(assets->get_honey_per_pollen_upgrade_icon(), pos_x, pos_y, WHITE);
-    DrawText("3", pos_x + gap, pos_y + gap, 20, BLACK);
-    DrawText("100 H", pos_x + CARD_WIDTH / 2 - MeasureText("100 H", 20), pos_y + CARD_HEIGHT + gap, 20, BLACK);
-    pos_x += CARD_WIDTH + POS_X_MARGIN;
-
-    DrawTexture(assets->get_bee_egg_icon(), pos_x, pos_y, WHITE);
-    DrawText("4", pos_x + gap, pos_y + gap, 20, BLACK);
-    DrawText("100 H", pos_x + CARD_WIDTH / 2 - MeasureText("100 H", 20), pos_y + CARD_HEIGHT + gap, 20, BLACK);
+        sprintf(buffer, "%d H", upgrades[i]->get_price());
+        DrawText(buffer,
+                 pos_x + CARD_WIDTH / 2 - MeasureText(buffer, 20),
+                 pos_y + CARD_HEIGHT + gap,
+                 20, BLACK);
+    }
 
     if (IsKeyPressed(KEY_B)) {
         state = GameState::Lobby;
-    } else if (IsKeyPressed(KEY_ONE)) {
-        if (player.get_honey() >= 100 && player.get_collect_amount_upgrades() < player.get_max_upgrades()) {
-            player.set_collect_amount_upgrades(player.get_collect_amount_upgrades() + 1);
-            player.set_honey(player.get_honey() - 100);
+    } else {
+        for (int i = 0; i < (int)upgrades.size(); ++i) {
+            if (IsKeyPressed(KEY_ONE + i)) {
+                if (IsKeyPressed(KEY_FOUR)) {
+                    PlaySound(assets->get_egg_hatch_sound());
+                } else {
+                    PlaySound(assets->get_purchase_sound());
+                }
+                upgrades[i]->purchase(player);
+            }
         }
-    } else if (IsKeyPressed(KEY_TWO)) {
-        if (player.get_honey() >= 100 && player.get_backpack_upgrades() < player.get_max_upgrades()) {
-            player.set_backpack_upgrades(player.get_backpack_upgrades() + 1);
-            player.set_honey(player.get_honey() - 100);
-        }
-    } else if (IsKeyPressed(KEY_THREE)) {
-        if (player.get_honey() >= 100 && player.get_honey_per_pollen_upgrades() < player.get_max_upgrades()) {
-            player.set_honey_per_pollen_upgrades(player.get_honey_per_pollen_upgrades() + 1);
-            player.set_honey(player.get_honey() - 100);
-        }
-    } else if (IsKeyPressed(KEY_FOUR)) {
-        std::cout << "TODO\n";
     }
 }
 
@@ -329,15 +316,15 @@ void Game::game_stats() {
     DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
     row++;
 
-    std::sprintf(buffer, "Backpack upgrades: %d", player.get_backpack_upgrades());
+    std::sprintf(buffer, "Backpack upgrades: %d", player.get_total_upgrades(PlayerUpgrade::BackpackCapacity));
     DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
     row++;
 
-    std::sprintf(buffer, "Collect amount upgrades: %d", player.get_collect_amount_upgrades());
+    std::sprintf(buffer, "Collect amount upgrades: %d", player.get_total_upgrades(PlayerUpgrade::CollectAmount));
     DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
     row++;
 
-    std::sprintf(buffer, "Honey per pollen upgrades: %d", player.get_honey_per_pollen_upgrades());
+    std::sprintf(buffer, "Honey per pollen upgrades: %d", player.get_total_upgrades(PlayerUpgrade::HoneyPerPollen));
     DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
     row++;
 

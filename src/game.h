@@ -3,13 +3,15 @@
 
 #include "player.h"
 #include "game_action.h"
+#include "upgrade.h"
 #include "asset_manager.h"
 #include "field.h"
 
 #include <string>
-#include <queue>
+#include <vector>
 #include <raylib.h>
 #include <random>
+#include <memory>
 
 #define WIDTH 1024
 #define HEIGHT 800
@@ -42,7 +44,6 @@ class Game {
     void game_stats();
 
 public:
-    friend std::ostream &operator<<(std::ostream& out, const Game& game);
     Game(
         GameState state,
         Player instance,

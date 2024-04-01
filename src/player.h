@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <random>
 
 #include "bee.h"
 #include "nlohmann/json.hpp"
@@ -14,12 +15,25 @@ class PollenCollection {
     int blue_pollen;
     int white_pollen;
 public:
-    friend std::ostream &operator<<(std::ostream& out, const PollenCollection collected);
     PollenCollection(int red_pollen, int blue_pollen, int white_pollen);
 
     int get_red_pollen() const;
     int get_blue_pollen() const;
     int get_white_pollen() const;
+};
+
+class FileNotFound : public std::exception {
+    std::string message;
+public:
+    FileNotFound(const std::string& message = "");
+    const char * what () const throw ();
+};
+
+enum PlayerUpgrade {
+    CollectAmount,
+    BackpackCapacity,
+    HoneyPerPollen,
+    NewBee
 };
 
 class Player {
@@ -54,7 +68,6 @@ class Player {
     /// json file and returns wheather or not
     /// the save was successfully terminated.
     bool save_player_stats();
-    friend std::ostream &operator<<(std::ostream& out, const Player& player);
 
     int calculate_honey_per_pollen();
     int calculate_backpack_capacity();
@@ -103,9 +116,10 @@ public:
     int get_honey_per_pollen();
     int get_collect_amount();
 
-    short int get_backpack_upgrades() const;
     short int get_collect_amount_upgrades() const;
+    short int get_backpack_upgrades() const;
     short int get_honey_per_pollen_upgrades() const;
+    short int get_total_upgrades(PlayerUpgrade upgrade_type);
     short int get_max_upgrades() const;
 
     void set_pollen(int amount);
@@ -113,8 +127,9 @@ public:
     void set_collect_amount_upgrades(int amount);
     void set_backpack_upgrades(int amount);
     void set_honey_per_pollen_upgrades(int amount);
+    void set_bees(Bee bee);
+
     int calculate_pollen(PollenCollection collected_pollen);
     PollenCollection collect(int red_flowers, int blue_flowers, int white_flowers);
 };
-
 #endif // PLAYER_H

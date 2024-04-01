@@ -1,4 +1,5 @@
 #include "player.h"
+#include <optional>
 
 PollenCollection::PollenCollection(int red_pollen, int blue_pollen, int white_pollen) :
     red_pollen(red_pollen), blue_pollen(blue_pollen), white_pollen(white_pollen) {}
@@ -63,6 +64,11 @@ bool Player::save_player_stats() {
     return true;
 }
 
+FileNotFound::FileNotFound(const std::string& message) : message(message) {}
+const char * FileNotFound::what () const throw () {
+    return "file not found";
+}
+
 /// load_player_stats reads the player_stats.json file
 /// and returns a Player object with its appropriate data
 Player Player::load_stats() {
@@ -72,9 +78,7 @@ Player Player::load_stats() {
     std::ifstream file(stats_file_path);
 
     if (!file.is_open()) {
-        std::cerr << "[ERROR]: Failed to open json file: " << stats_file_path
-                  << std::endl;
-        exit(0);
+        throw FileNotFound("Couldn't find file");
     }
 
     json stats;
@@ -129,46 +133,6 @@ Player Player::load_stats() {
                honey_per_pollen_upgrades,
                bees
            );
-}
-
-std::ostream &operator<<(std::ostream& out, const PollenCollection collected) {
-    out << "Collected: \n";
-    out << "Red pollen: " << collected.red_pollen;
-    out << "\n";
-
-    out << "Blue pollen: " << collected.blue_pollen;
-    out << "\n";
-
-    out << "White pollen: " << collected.white_pollen;
-    return out;
-}
-
-std::ostream &operator<<(std::ostream &out, const Player &player) {
-    out << "Name: " << player.name << std::endl;
-    out << "Total honey: " << player.total_honey << std::endl;
-    out << "Total bees: " << player.total_bees << std::endl;
-    out << "Red bees: " << player.red_bees << std::endl;
-    out << "Blue bees: " << player.blue_bees << std::endl;
-    out << "White bees: " << player.white_bees << std::endl;
-    out << "Red pollen multiplier: " << player.red_pollen_multiplier << std::endl;
-    out << "Blue pollen multiplier: " << player.blue_pollen_multiplier << std::endl;
-    out << "White pollen multiplier: " << player.white_pollen_multiplier << std::endl;
-    out << "Honey per pollen: " << player.honey_per_pollen << std::endl;
-    out << "Collect amount: " << player.collect_amount << std::endl;
-    out << "Honey: " << player.honey << std::endl;
-    out << "Backpack capacity: " << player.backpack_capacity << std::endl;
-    out << "Pollen: " << player.pollen << std::endl;
-    out << "Backpack upgrades: " << player.backpack_upgrades << std::endl;
-    out << "Collect amount upgrades: " << player.collect_amount_upgrades << std::endl;
-    out << "Honey per pollen upgrades: " << player.honey_per_pollen_upgrades << std::endl;
-    out << "Honey per pollen upgrades: " << player.honey_per_pollen_upgrades << std::endl;
-
-    out << "The player has the following bees:\n";
-
-    for (Bee bee : player.bees) {
-        std::cout << bee << std::endl;
-    }
-    return out;
 }
 
 int Player::get_pollen() const {
@@ -277,18 +241,26 @@ PollenCollection Player::collect(int red_flowers, int blue_flowers, int white_fl
     return PollenCollection(red_pollen, blue_pollen, white_pollen);
 }
 
-void Player::set_collect_amount_upgrades(int amount) {
-    collect_amount_upgrades = amount;
-    assert(collect_amount_upgrades <= max_upgrades);
-}
+short int Player::get_total_upgrades(PlayerUpgrade upgrade_type) {
+    switch(upgrade_type) {
+    case PlayerUpgrade::CollectAmount:
+        return collect_amount_upgrades;
+        break;
 
-void Player::set_backpack_upgrades(int amount) {
-    backpack_upgrades = amount;
-    assert(backpack_upgrades <= max_upgrades);
-}
-void Player::set_honey_per_pollen_upgrades(int amount) {
-    honey_per_pollen_upgrades = amount;
-    assert(honey_per_pollen <= max_upgrades);
+    case PlayerUpgrade::BackpackCapacity:
+        return backpack_upgrades;
+        break;
+
+    case PlayerUpgrade::HoneyPerPollen:
+        return honey_per_pollen_upgrades;
+        break;
+
+    case PlayerUpgrade::NewBee:
+        return bees.size();
+        break;
+    }
+    // TODO: remove this
+    return 0;
 }
 
 int Player::calculate_honey_per_pollen() {
@@ -302,4 +274,29 @@ int Player::calculate_honey_per_pollen() {
 int Player::calculate_backpack_capacity() {
     int capacity = backpack_capacity + backpack_capacity * backpack_upgrades;
     return capacity;
+}
+
+void Player::set_collect_amount_upgrades(int amount) {
+    assert(amount <= max_upgrades);
+    collect_amount_upgrades = amount;
+}
+
+void Player::set_backpack_upgrades(int amount) {
+    assert(amount <= max_upgrades);
+    backpack_upgrades = amount;
+}
+
+void Player::set_honey_per_pollen_upgrades(int amount) {
+    assert(amount <= max_upgrades);
+    honey_per_pollen_upgrades = amount;
+}
+
+void Player::set_bees(Bee bee) {
+    if ((int)bees.size() == max_upgrades) {
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> index(0, (int)bees.size() - 1);
+        int idx = index(generator);
+        bees.erase(bees.begin() + idx);
+    }
+    bees.push_back(bee);
 }

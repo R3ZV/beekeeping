@@ -22,11 +22,7 @@ class Field {
     );
 
 public:
-    friend std::ostream &operator<<(std::ostream& out, const Field& field);
-    ~Field();
     static std::vector<Field> all_fields(std::shared_ptr<AssetManager> textures);
-    Field(const Field& other);
-    Field& operator=(const Field& other);
 
     Texture2D get_field() const;
     int get_red_flowers() const;

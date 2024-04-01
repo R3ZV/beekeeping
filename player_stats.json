@@ -10,7 +10,7 @@
     "white_pollen_multiplier": 0,
     "honey_per_pollen":  1,
     "collect_amount": 1,
-    "honey": 0,
+    "honey": 999999,
     "backpack_capacity": 100,
     "pollen": 0,
     "backpack_upgrades": 0,
