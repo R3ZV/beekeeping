@@ -15,12 +15,18 @@ class PollenCollection {
     int blue_pollen;
     int white_pollen;
 public:
-    friend std::ostream &operator<<(std::ostream& out, const PollenCollection collected);
     PollenCollection(int red_pollen, int blue_pollen, int white_pollen);
 
     int get_red_pollen() const;
     int get_blue_pollen() const;
     int get_white_pollen() const;
+};
+
+class FileNotFound : public std::exception {
+    std::string message;
+public:
+    FileNotFound(const std::string& message = "");
+    const char * what () const throw ();
 };
 
 enum PlayerUpgrade {
@@ -62,7 +68,6 @@ class Player {
     /// json file and returns wheather or not
     /// the save was successfully terminated.
     bool save_player_stats();
-    friend std::ostream &operator<<(std::ostream& out, const Player& player);
 
     int calculate_honey_per_pollen();
     int calculate_backpack_capacity();
@@ -127,5 +132,4 @@ public:
     int calculate_pollen(PollenCollection collected_pollen);
     PollenCollection collect(int red_flowers, int blue_flowers, int white_flowers);
 };
-
 #endif // PLAYER_H

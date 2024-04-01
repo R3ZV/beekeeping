@@ -1,16 +1,5 @@
 #include "game.h"
 
-std::ostream &operator<<(std::ostream& out, const Game& game) {
-    out << "Game state: \n" << game.state;
-    out << "\n";
-
-    out << "Player: \n" << game.player;
-    out << "\n";
-
-    out << "Assets:\n " << *game.assets;
-    return out;
-}
-
 void Game::game_main_menu() {
     ClearBackground(RAYWHITE);
     DrawTexture(assets->get_background(), 0, 0, RAYWHITE);
@@ -137,7 +126,6 @@ void Game::game_field() {
     const int FILED_HEIGHT = 256;
     std::vector<Field> fields = Field::all_fields(assets);
     Field current_field = fields[state];
-    std::cout << "Field has following properties: \n" << current_field << "\n";
     DrawTexture(current_field.get_field(), FIELD_X, FIELD_Y, WHITE);
 
     for (int i = 0; i < (int)actions.size(); ++i) {
@@ -194,8 +182,6 @@ void Game::game_field() {
                                          current_field.get_blue_flowers(),
                                          current_field.get_white_flowers()
                                      );
-        std::cout << "From the field with: " << current_field << "\n";
-        std::cout << "Collected: " << collected << "\n";
         std::string total_pollen = "+" + std::to_string(
                                        collected.get_red_pollen()
                                        + collected.get_blue_pollen()

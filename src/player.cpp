@@ -1,4 +1,5 @@
 #include "player.h"
+#include <optional>
 
 PollenCollection::PollenCollection(int red_pollen, int blue_pollen, int white_pollen) :
     red_pollen(red_pollen), blue_pollen(blue_pollen), white_pollen(white_pollen) {}
@@ -63,6 +64,11 @@ bool Player::save_player_stats() {
     return true;
 }
 
+FileNotFound::FileNotFound(const std::string& message) : message(message) {}
+const char * FileNotFound::what () const throw () {
+    return "file not found";
+}
+
 /// load_player_stats reads the player_stats.json file
 /// and returns a Player object with its appropriate data
 Player Player::load_stats() {
@@ -72,9 +78,7 @@ Player Player::load_stats() {
     std::ifstream file(stats_file_path);
 
     if (!file.is_open()) {
-        std::cerr << "[ERROR]: Failed to open json file: " << stats_file_path
-                  << std::endl;
-        exit(0);
+        throw FileNotFound("Couldn't find file");
     }
 
     json stats;
@@ -129,46 +133,6 @@ Player Player::load_stats() {
                honey_per_pollen_upgrades,
                bees
            );
-}
-
-std::ostream &operator<<(std::ostream& out, const PollenCollection collected) {
-    out << "Collected: \n";
-    out << "Red pollen: " << collected.red_pollen;
-    out << "\n";
-
-    out << "Blue pollen: " << collected.blue_pollen;
-    out << "\n";
-
-    out << "White pollen: " << collected.white_pollen;
-    return out;
-}
-
-std::ostream &operator<<(std::ostream &out, const Player &player) {
-    out << "Name: " << player.name << std::endl;
-    out << "Total honey: " << player.total_honey << std::endl;
-    out << "Total bees: " << player.total_bees << std::endl;
-    out << "Red bees: " << player.red_bees << std::endl;
-    out << "Blue bees: " << player.blue_bees << std::endl;
-    out << "White bees: " << player.white_bees << std::endl;
-    out << "Red pollen multiplier: " << player.red_pollen_multiplier << std::endl;
-    out << "Blue pollen multiplier: " << player.blue_pollen_multiplier << std::endl;
-    out << "White pollen multiplier: " << player.white_pollen_multiplier << std::endl;
-    out << "Honey per pollen: " << player.honey_per_pollen << std::endl;
-    out << "Collect amount: " << player.collect_amount << std::endl;
-    out << "Honey: " << player.honey << std::endl;
-    out << "Backpack capacity: " << player.backpack_capacity << std::endl;
-    out << "Pollen: " << player.pollen << std::endl;
-    out << "Backpack upgrades: " << player.backpack_upgrades << std::endl;
-    out << "Collect amount upgrades: " << player.collect_amount_upgrades << std::endl;
-    out << "Honey per pollen upgrades: " << player.honey_per_pollen_upgrades << std::endl;
-    out << "Honey per pollen upgrades: " << player.honey_per_pollen_upgrades << std::endl;
-
-    out << "The player has the following bees:\n";
-
-    for (Bee bee : player.bees) {
-        std::cout << bee << std::endl;
-    }
-    return out;
 }
 
 int Player::get_pollen() const {

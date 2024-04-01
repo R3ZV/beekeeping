@@ -4,18 +4,22 @@
 
 #include <memory>
 #include <raylib.h>
-#include <iostream>
 
 int main() {
-    Player player = Player::load_stats();
+    std::unique_ptr<Player> player;
+
+    try {
+        player = std::make_unique<Player>(Player::load_stats());
+    } catch (FileNotFound &err) {
+        std::cout << "[ERROR]: couldn't load stats due to: " << err.what() << std::endl;
+        return 1;
+    }
 
     InitWindow(WIDTH, HEIGHT, "Bee Keeping");
     InitAudioDevice();
 
-    auto assets = std::make_shared<AssetManager>();
-    Game game = Game(MainMenu, player, assets, {});
-    std::cout << "DBG:\n";
-    std::cout << game << "\n";
+    auto textures = std::make_shared<AssetManager>();
+    Game game = Game(MainMenu, *player, textures, {});
 
     bool is_playing = false;
     double start_timer;

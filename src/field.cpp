@@ -1,12 +1,4 @@
 #include "field.h"
-std::ostream &operator<<(std::ostream& out, const Field& field) {
-    out << "Red flowers: " << field.red_flowers;
-    out << "\n";
-    out << "Blue flowers: " << field.blue_flowers;
-    out << "\n";
-    out << "White flowers: " << field.white_flowers;
-    return out;
-}
 
 Field::Field(
     int red_flowers,
@@ -19,29 +11,6 @@ Field::Field(
     white_flowers(white_flowers),
     field(field)
 {}
-
-Field::~Field() {
-    red_flowers = 0;
-    blue_flowers = 0;
-    white_flowers = 0;
-}
-
-Field::Field(const Field& other) {
-    red_flowers = other.red_flowers;
-    blue_flowers = other.blue_flowers;
-    white_flowers = other.white_flowers;
-    field = other.field;
-}
-
-Field& Field::operator=(const Field& other) {
-    if (this != &other) {
-        red_flowers = other.red_flowers;
-        blue_flowers = other.blue_flowers;
-        white_flowers = other.white_flowers;
-        field = other.field;
-    }
-    return *this;
-}
 
 std::vector<Field> Field::all_fields(std::shared_ptr<AssetManager> textures) {
     std::vector<Field> fields;

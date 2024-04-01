@@ -44,7 +44,6 @@ class Game {
     void game_stats();
 
 public:
-    friend std::ostream &operator<<(std::ostream& out, const Game& game);
     Game(
         GameState state,
         Player instance,
