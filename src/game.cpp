@@ -103,8 +103,9 @@ void Game::game_lobby() {
             state = GameState::Stats;
         } else if (IsKeyPressed(KEY_H)) {
             PlaySound(assets->get_honey_sold_sound());
-            int honey = player.get_honey() + player.get_pollen() * player.get_honey_per_pollen();
-            player.set_honey(honey);
+            int honey = player.get_pollen() * player.get_honey_per_pollen();
+            player.set_total_honey(honey);
+            player.set_honey(player.get_honey() + honey);
             player.set_pollen(0);
         } else if (IsKeyPressed(KEY_F)) {
             state = GameState::FieldSelection;

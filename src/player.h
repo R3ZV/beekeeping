@@ -69,9 +69,9 @@ class Player {
     /// the save was successfully terminated.
     bool save_player_stats();
 
+    double calculate_collect_amount();
     int calculate_honey_per_pollen();
     int calculate_backpack_capacity();
-    int calculate_collect_amount();
 
 public:
     Player (
@@ -124,10 +124,15 @@ public:
 
     void set_pollen(int amount);
     void set_honey(int amount);
+    void set_total_honey(int amount);
     void set_collect_amount_upgrades(int amount);
     void set_backpack_upgrades(int amount);
     void set_honey_per_pollen_upgrades(int amount);
     void set_bees(Bee bee);
+
+    void set_red_pollen_multiplier(int amount);
+    void set_blue_pollen_multiplier(int amount);
+    void set_white_pollen_multiplier(int amount);
 
     int calculate_pollen(PollenCollection collected_pollen);
     PollenCollection collect(int red_flowers, int blue_flowers, int white_flowers);

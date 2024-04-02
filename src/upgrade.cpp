@@ -67,5 +67,13 @@ void BeeUpgrade::purchase(Player& player) const {
 
         Bee bee = Bee(bee_type, bee_honey_per_pollen, bee_color_multiplier);
         player.set_bees(bee);
+
+        if (bee_type == 1) {
+            player.set_blue_pollen_multiplier(player.get_blue_pollen_multiplier() + bee_color_multiplier);
+        } else if (bee_type == 2) {
+            player.set_white_pollen_multiplier(player.get_white_pollen_multiplier() + bee_color_multiplier);
+        } else {
+            player.set_red_pollen_multiplier(player.get_red_pollen_multiplier() + bee_color_multiplier);
+        }
     }
 }

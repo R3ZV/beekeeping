@@ -27,7 +27,7 @@ you can get more bees and upgrade your backpack and your pollen collector.
 - Can upgrade your honey per pollen (to get more honey)
 
 # Requirements
-- G++ 11
+- G++ 17
 - Make
 - Raylib
 
