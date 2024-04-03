@@ -7,6 +7,7 @@
 #include "asset_manager.h"
 #include "field.h"
 
+#include <sstream>
 #include <string>
 #include <vector>
 #include <raylib.h>

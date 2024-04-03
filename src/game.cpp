@@ -1,10 +1,23 @@
 #include "game.h"
 
+Game::Game(
+    GameState state,
+    Player instance,
+    std::shared_ptr<AssetManager> textures,
+    std::vector<GameAction> actions
+) :
+    state(state),
+    player(instance),
+    assets(textures),
+    actions(actions)
+{}
+
 void Game::game_main_menu() {
     ClearBackground(RAYWHITE);
     DrawTexture(assets->get_background(), 0, 0, RAYWHITE);
-    DrawText("BEEKEEPER", WIDTH / 2 - 275, 5, 90, RAYWHITE);
-    DrawText("Press ENTER", WIDTH / 2 - 120, 100, 30, DARKGRAY);
+
+    DrawText("BEEKEEPER", WIDTH / 2 - MeasureText("BEEKEEPER", 90) / 2, 5, 90, RAYWHITE);
+    DrawText("Press ENTER", WIDTH / 2 - MeasureText("Press ENTER", 30) / 2, 100, 30, DARKGRAY);
 
     if (IsKeyPressed(KEY_ENTER)) {
         state = GameState::Lobby;
@@ -14,75 +27,54 @@ void Game::game_main_menu() {
 void Game::game_lobby() {
     const int NORMAL_FONT_SIZE = 20;
     ClearBackground(BLUE);
-    DrawText("LOBBY", WIDTH / 2 - 3 * NORMAL_FONT_SIZE, 100, 2 * NORMAL_FONT_SIZE, RAYWHITE);
+    DrawText("LOBBY", WIDTH / 2 - MeasureText("LOBBY", 2 * NORMAL_FONT_SIZE) / 2, 100, 2 * NORMAL_FONT_SIZE, RAYWHITE);
 
-    char buffer[50];
-    std::sprintf(buffer, "Pollen: %d / %d", player.get_pollen(), player.get_backpack_capacity());
-    DrawText(buffer, WIDTH - strlen(buffer) * 12, 20, NORMAL_FONT_SIZE, RAYWHITE);
+    std::ostringstream oss;
+    oss << "Pollen: " << player.get_pollen() << " / " << player.get_backpack_capacity();
+    DrawText(oss.str().c_str(), WIDTH - oss.str().size() * 12, 20, NORMAL_FONT_SIZE, RAYWHITE);
+    oss.str("");
 
-    std::sprintf(buffer, "Honey: %d", player.get_honey());
-    DrawText(buffer, 2 * NORMAL_FONT_SIZE, 20, NORMAL_FONT_SIZE, RAYWHITE);
+    oss << "Honey: " << player.get_honey();
+    DrawText(oss.str().c_str(), 2 * NORMAL_FONT_SIZE, 20, NORMAL_FONT_SIZE, RAYWHITE);
 
-    const int AVERAGE_LETTERS = 12;
-    const int GAP = 50;
-    DrawText("[U]pgrades", WIDTH - NORMAL_FONT_SIZE * AVERAGE_LETTERS, HEIGHT - 100 - 4 * GAP, NORMAL_FONT_SIZE, RAYWHITE);
-    DrawText("[S]tats", WIDTH - NORMAL_FONT_SIZE * AVERAGE_LETTERS, HEIGHT - 100 - 3 * GAP, NORMAL_FONT_SIZE, RAYWHITE);
-    DrawText("Sell [H]oney", WIDTH - NORMAL_FONT_SIZE * AVERAGE_LETTERS, HEIGHT - 100 - 2 * GAP, NORMAL_FONT_SIZE, RAYWHITE);
-    DrawText(state == GameState::FieldSelection ? "[B]ack" : "[F]ields", WIDTH - NORMAL_FONT_SIZE * AVERAGE_LETTERS, HEIGHT - 100 - GAP, NORMAL_FONT_SIZE, RAYWHITE);
+    std::vector<std::string> buttons;
+    buttons.push_back("[U]pgrades");
+    buttons.push_back("[S]tats");
+    buttons.push_back("Sell [H]oney");
+    buttons.push_back(state == GameState::FieldSelection ? "[B]ack" : "[F]ields");
+
+    const int AVERAGE_LETTERS = 10, GAP = 50;
+    for (int i = 0; i < (int)buttons.size(); ++i) {
+        DrawText(buttons[i].c_str(), WIDTH - NORMAL_FONT_SIZE * AVERAGE_LETTERS, HEIGHT - 250 + i * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+    }
+
+    std::vector<Texture2D> fields_icons;
+    fields_icons.push_back(assets->get_strawberry_icon());
+    fields_icons.push_back(assets->get_sunflower_icon());
+    fields_icons.push_back(assets->get_clover_icon());
+
+    fields_icons.push_back(assets->get_cactus_icon());
+    fields_icons.push_back(assets->get_cherry_icon());
+    fields_icons.push_back(assets->get_orange_icon());
+
+    fields_icons.push_back(assets->get_blueberry_icon());
 
     // display fields
     const int X_GAP = 116;
     const int Y_GAP = 80;
     const int TEXT_OFFSET = 5;
-    int field_icon_x = 350;
-    int field_icon_y = 200;
 
-    // First 3
-    DrawTexture(assets->get_strawberry_icon(), field_icon_x, field_icon_y, WHITE);
-    if (state == GameState::FieldSelection) {
-        DrawText("1", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
-    }
-    field_icon_x += X_GAP;
+    for (int i = 0; i < (int)fields_icons.size(); ++i) {
+        int field_icon_x = 350 + X_GAP * (i % 3);
+        int field_icon_y = 200 + Y_GAP * (i / 3);
 
-    DrawTexture(assets->get_sunflower_icon(), field_icon_x, field_icon_y, WHITE);
-    if (state == GameState::FieldSelection) {
-        DrawText("2", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
-    }
-    field_icon_x += X_GAP;
-
-    DrawTexture(assets->get_clover_icon(), field_icon_x, field_icon_y, WHITE);
-    if (state == GameState::FieldSelection) {
-        DrawText("3", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
-    }
-
-    // Next 3
-    field_icon_y += Y_GAP;
-    field_icon_x = 350;
-
-    DrawTexture(assets->get_cactus_icon(), field_icon_x, field_icon_y, WHITE);
-    if (state == GameState::FieldSelection) {
-        DrawText("4", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
-    }
-    field_icon_x += X_GAP;
-
-    DrawTexture(assets->get_cherry_icon(), field_icon_x, field_icon_y, WHITE);
-    if (state == GameState::FieldSelection) {
-        DrawText("5", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
-    }
-    field_icon_x += X_GAP;
-
-    DrawTexture(assets->get_orange_icon(), field_icon_x, field_icon_y, WHITE);
-    if (state == GameState::FieldSelection) {
-        DrawText("6", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
-    }
-
-    field_icon_y += Y_GAP;
-    field_icon_x = 350 + X_GAP;
-
-    // Last
-    DrawTexture(assets->get_blueberry_icon(), field_icon_x, field_icon_y, WHITE);
-    if (state == GameState::FieldSelection) {
-        DrawText("7", field_icon_x + TEXT_OFFSET, field_icon_y + TEXT_OFFSET, 20, BLACK);
+        DrawTexture(fields_icons[i], field_icon_x, field_icon_y, WHITE);
+        if (state == GameState::FieldSelection) {
+            DrawText(std::to_string(i + 1).c_str(),
+                     field_icon_x + TEXT_OFFSET,
+                     field_icon_y + TEXT_OFFSET,
+                     20, BLACK);
+        }
     }
 
     if (state == GameState::FieldSelection) {
@@ -96,30 +88,33 @@ void Game::game_lobby() {
                 state = new_state;
             }
         }
-    } else {
-        if (IsKeyPressed(KEY_U)) {
-            state = GameState::Upgrades;
-        } else if (IsKeyPressed(KEY_S)) {
-            state = GameState::Stats;
-        } else if (IsKeyPressed(KEY_H)) {
-            PlaySound(assets->get_honey_sold_sound());
-            int honey = player.get_pollen() * player.get_honey_per_pollen();
-            player.set_total_honey(honey);
-            player.set_honey(player.get_honey() + honey);
-            player.set_pollen(0);
-        } else if (IsKeyPressed(KEY_F)) {
-            state = GameState::FieldSelection;
-        }
+        return;
+    }
+
+    if (IsKeyPressed(KEY_U)) {
+        state = GameState::Upgrades;
+    } else if (IsKeyPressed(KEY_S)) {
+        state = GameState::Stats;
+    } else if (IsKeyPressed(KEY_H)) {
+        PlaySound(assets->get_honey_sold_sound());
+
+        int honey = player.get_pollen() * player.get_honey_per_pollen();
+        player.set_total_honey(honey);
+        player.set_honey(player.get_honey() + honey);
+        player.set_pollen(0);
+    } else if (IsKeyPressed(KEY_F)) {
+        state = GameState::FieldSelection;
     }
 }
 
 void Game::game_field() {
     ClearBackground(BLUE);
-    char buffer[50];
-    sprintf(buffer, "Pollen: %d / %d", player.get_pollen(), player.get_backpack_capacity());
-    DrawText(buffer, WIDTH / 2 - strlen(buffer) * 10, 20, 30, RAYWHITE);
-    DrawText("SPACE to collect pollen", WIDTH / 2 - 130, HEIGHT - 100, 20, WHITE);
-    DrawText("[B]ack", WIDTH / 2 - 50, HEIGHT - 50, 20, WHITE);
+
+    std::ostringstream oss;
+    oss << "Pollen: " << player.get_pollen() << " / " << player.get_backpack_capacity();
+    DrawText(oss.str().c_str(), WIDTH / 2 - oss.str().size() * 10, 20, 30, RAYWHITE);
+    DrawText("SPACE to collect pollen", WIDTH / 2 - MeasureText("SPACE to collect pollen", 20) / 2, HEIGHT - 100, 20, WHITE);
+    DrawText("[B]ack", WIDTH / 2 - MeasureText("[B]ack", 20) / 2, HEIGHT - 50, 20, WHITE);
 
     const int FIELD_X = 100;
     const int FIELD_Y = 120;
@@ -199,12 +194,12 @@ void Game::game_upgrades() {
     const int NORMAL_FONT_SIZE = 20;
     ClearBackground(ORANGE);
 
-    char buffer[50];
-    std::sprintf(buffer, "Honey: %d", player.get_honey());
-    DrawText(buffer, 2 * NORMAL_FONT_SIZE, 20, NORMAL_FONT_SIZE, RAYWHITE);
+    std::ostringstream oss;
+    oss << "Honey: " << player.get_honey();
+    DrawText(oss.str().c_str(), 2 * NORMAL_FONT_SIZE, 20, NORMAL_FONT_SIZE, RAYWHITE);
 
-    DrawText("UPGRADES:", WIDTH / 2 - 5 * NORMAL_FONT_SIZE, 100, 2 * NORMAL_FONT_SIZE, RAYWHITE);
-    DrawText("[B]ack", WIDTH / 2 - MeasureText("[B]ack", NORMAL_FONT_SIZE), HEIGHT - 100, NORMAL_FONT_SIZE, RAYWHITE);
+    DrawText("UPGRADES:", WIDTH / 2 - MeasureText("UPGRADES:", 2 * NORMAL_FONT_SIZE) / 2, 100, 2 * NORMAL_FONT_SIZE, RAYWHITE);
+    DrawText("[B]ack", WIDTH / 2 - MeasureText("[B]ack", NORMAL_FONT_SIZE) / 2, HEIGHT - 100, NORMAL_FONT_SIZE, RAYWHITE);
 
     const int CARD_WIDTH = 128;
     const int CARD_HEIGHT = 64;
@@ -234,16 +229,15 @@ void Game::game_upgrades() {
 
         DrawTexture(upgrades[i]->get_icon(), pos_x, pos_y, WHITE);
 
-        char buffer[50];
-        sprintf(buffer, "%d", i + 1);
-        DrawText(buffer,
+        DrawText(std::to_string(i + 1).c_str(),
                  pos_x + gap,
                  pos_y + gap,
                  20, BLACK);
 
-        sprintf(buffer, "%d H", upgrades[i]->get_price());
-        DrawText(buffer,
-                 pos_x + CARD_WIDTH / 2 - MeasureText(buffer, 20),
+        std::ostringstream oss;
+        oss << upgrades[i]->get_price() << " H";
+        DrawText(oss.str().c_str(),
+                 pos_x + CARD_WIDTH / 2 - MeasureText(oss.str().c_str(), 20),
                  pos_y + CARD_HEIGHT + gap,
                  20, BLACK);
     }
@@ -267,133 +261,51 @@ void Game::game_upgrades() {
 void Game::game_stats() {
     ClearBackground(RED);
     const int FONT_SIZE = 22;
-    DrawText("STATS:", WIDTH / 2 - 3 * FONT_SIZE, 30, 2 * FONT_SIZE, RAYWHITE);
-    DrawText("[B]ack", WIDTH / 2 - 3 * FONT_SIZE, HEIGHT - 30, FONT_SIZE, RAYWHITE);
+    DrawText("STATS:", WIDTH / 2 - MeasureText("STATS:", FONT_SIZE), 30, 2 * FONT_SIZE, RAYWHITE);
+    DrawText("[B]ack", WIDTH / 2 - MeasureText("[B]ack:", FONT_SIZE), HEIGHT - 30, FONT_SIZE, RAYWHITE);
+
+    std::vector<std::pair<std::string, int>> stats;
+    stats.push_back({"Total honey: ", player.get_total_honey()});
+    stats.push_back({"Total bees: ", player.get_total_bees()});
+    stats.push_back({"Red bees: ", player.get_total_bees_of_type(BeeColor::Red)});
+    stats.push_back({"Blue bees: ", player.get_total_bees_of_type(BeeColor::Blue)});
+    stats.push_back({"White bees: ", player.get_total_bees_of_type(BeeColor::White)});
+    stats.push_back({"Red pollen multiplier: ", player.get_red_pollen_multiplier()});
+    stats.push_back({"Blue pollen multiplier: ", player.get_blue_pollen_multiplier()});
+    stats.push_back({"White pollen multiplier: ", player.get_blue_pollen_multiplier()});
+    stats.push_back({"Honey per pollen: ", player.get_honey_per_pollen()});
+    stats.push_back({"Collect amount: ", player.get_collect_amount()});
+    stats.push_back({"Backpack upgrades: ", player.get_total_upgrades(PlayerUpgrade::BackpackCapacity)});
+    stats.push_back({"Collect amount upgrades: ", player.get_total_upgrades(PlayerUpgrade::CollectAmount)});
+    stats.push_back({"Honey per pollen upgrades: ", player.get_total_upgrades(PlayerUpgrade::HoneyPerPollen)});
 
     const int GAP = 24;
     const int BASE = 100;
     const int NORMAL_FONT_SIZE = 20;
-    int row = 1;
 
-    char buffer[50];
-
-    std::sprintf(buffer, "Total honey: %d", player.get_total_honey());
-    DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
-    row++;
-
-    std::sprintf(buffer, "Total bees: %d", player.get_total_bees());
-    DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
-    row++;
-
-    std::sprintf(buffer, "Red bees: %d", player.get_total_bees_of_type(BeeColor::Red));
-    DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
-    row++;
-
-    std::sprintf(buffer, "Blue bees: %d", player.get_total_bees_of_type(BeeColor::Blue));
-    DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
-    row++;
-
-    std::sprintf(buffer, "White bees: %d", player.get_total_bees_of_type(BeeColor::White));
-    DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
-    row++;
-
-    std::sprintf(buffer, "Red pollen multiplier: %d", player.get_red_pollen_multiplier());
-    DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
-    row++;
-
-    std::sprintf(buffer, "Blue pollen multiplier: %d", player.get_blue_pollen_multiplier());
-    DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
-    row++;
-
-    std::sprintf(buffer, "White pollen multiplier: %d", player.get_blue_pollen_multiplier());
-    DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
-    row++;
-
-    std::sprintf(buffer, "Honey per pollen: %d", player.get_honey_per_pollen());
-    DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
-    row++;
-
-    std::sprintf(buffer, "Collect amount: %d", player.get_collect_amount());
-    DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
-    row++;
-
-    std::sprintf(buffer, "Backpack upgrades: %d", player.get_total_upgrades(PlayerUpgrade::BackpackCapacity));
-    DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
-    row++;
-
-    std::sprintf(buffer, "Collect amount upgrades: %d", player.get_total_upgrades(PlayerUpgrade::CollectAmount));
-    DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
-    row++;
-
-    std::sprintf(buffer, "Honey per pollen upgrades: %d", player.get_total_upgrades(PlayerUpgrade::HoneyPerPollen));
-    DrawText(buffer, 224, BASE + row * GAP, NORMAL_FONT_SIZE, RAYWHITE);
-    row++;
+    for (int row = 0; row < (int)stats.size(); ++row) {
+        std::ostringstream oss;
+        oss << stats[row].first << stats[row].second;
+        std::string fmt = oss.str();
+        DrawText(fmt.c_str(), 224, BASE + (row + 1) * GAP, NORMAL_FONT_SIZE, RAYWHITE);
+    }
 
     if (IsKeyPressed(KEY_B)) {
         state = GameState::Lobby;
     }
 }
 
-Game::Game(
-    GameState state,
-    Player instance,
-    std::shared_ptr<AssetManager> textures,
-    std::vector<GameAction> actions
-) :
-    state(state),
-    player(instance),
-    assets(textures),
-    actions(actions)
-{}
-
 void Game::draw_state() {
-    switch (state) {
-    case MainMenu:
+    // this assumes the flower fields will be always first in the enum
+    if (state <= BlueberryField) {
+        game_field();
+    } else if (state == MainMenu) {
         game_main_menu();
-        break;
-
-    case Lobby:
+    } else if (state == Lobby || state == FieldSelection) {
         game_lobby();
-        break;
-
-    case FieldSelection:
-        game_lobby();
-        break;
-
-    case StrawberryField:
-        game_field();
-        break;
-
-    case SunflowerField:
-        game_field();
-        break;
-
-    case CloverField:
-        game_field();
-        break;
-
-    case CactusField:
-        game_field();
-        break;
-
-    case CherryField:
-        game_field();
-        break;
-
-    case OrangeField:
-        game_field();
-        break;
-
-    case BlueberryField:
-        game_field();
-        break;
-
-    case Upgrades:
+    } else if (state == Upgrades) {
         game_upgrades();
-        break;
-
-    case Stats:
+    } else if (state == Stats) {
         game_stats();
-        break;
     }
 }
