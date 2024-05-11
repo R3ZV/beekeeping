@@ -4,12 +4,14 @@
 #include <cstdint>
 #include <iostream>
 
+// TODO: for static add to count how many bees have been init
 enum BeeColor { Red, Blue, White };
 
 class Bee {
     BeeColor type;
     short int color_multiplier;
     short int honey_per_pollen;
+    static int created;
 
     friend std::ostream &operator<<(std::ostream &out, const Bee &bee);
 
@@ -20,6 +22,8 @@ public:
     BeeColor get_type() const;
     short int get_honey_per_pollen() const;
     short int get_color_multiplier() const;
+
+    static void display_created();
 };
 
 #endif // BEE_H

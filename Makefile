@@ -1,4 +1,4 @@
-CC := zig c++
+CC := g++
 CFLAGS := -std=c++17 -Wall -Wextra
 LDFLAGS := -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 INCLUDES := -I/usr/local/include

@@ -252,6 +252,8 @@ void Game::game_upgrades() {
                 } else {
                     PlaySound(assets->get_purchase_sound());
                 }
+
+                // dynamic dispatch
                 upgrades[i]->purchase(player);
             }
         }

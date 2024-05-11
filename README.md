@@ -25,6 +25,7 @@ you can get more bees and upgrade your backpack and your pollen collector.
 - Can upgrade your collect amount (how much pollen you get when you press SPACE)
 - Can upgrade your backpack capacity
 - Can upgrade your honey per pollen (to get more honey)
+- Counts the number of created bees in a session
 
 # Requirements
 - G++ 17
