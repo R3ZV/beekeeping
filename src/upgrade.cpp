@@ -11,6 +11,45 @@ Upgrade::Upgrade(
     icon(icon)
 {}
 
+CollectAmountUpgrade::CollectAmountUpgrade(
+    int price,
+    int upgrades,
+    Texture2D icon
+) :
+    Upgrade(price, upgrades, icon)
+{}
+
+BackpackUpgrade::BackpackUpgrade(
+    int price,
+    int upgrades,
+    Texture2D icon
+) :
+    Upgrade(price, upgrades, icon)
+{}
+
+HoneyPerPollenUpgrade::HoneyPerPollenUpgrade(
+    int price,
+    int upgrades,
+    Texture2D icon
+) :
+    Upgrade(price, upgrades, icon)
+{}
+
+BeeUpgrade::BeeUpgrade(
+    int price,
+    int upgrades,
+    Texture2D icon,
+    int red_bees,
+    int blue_bees,
+    int white_bees
+
+) :
+    Upgrade(price, upgrades, icon),
+    red_bees(red_bees),
+    blue_bees(blue_bees),
+    white_bees(white_bees)
+{}
+
 int Upgrade::get_price() const {
     int current_price = price + price * upgrades * upgrades;
     return current_price;
@@ -45,12 +84,28 @@ void HoneyPerPollenUpgrade::purchase(Player& player) const {
     }
 }
 
+
+int BeeUpgrade::get_price() const {
+    int upgrades = get_upgrades();
+    int current_price = price + price * upgrades * upgrades * upgrades / 2;
+    return current_price;
+}
+
 void BeeUpgrade::purchase(Player& player) const {
     if (player.get_honey() >= get_price() && get_upgrades() < player.get_max_upgrades()) {
         player.set_honey(player.get_honey() - get_price());
 
         std::random_device generator;
-        std::uniform_int_distribution<int> type_distibution(0, 2);
+        int left_type = 0, right_type = 2;
+        if (red_bees > blue_bees && red_bees > white_bees) {
+            left_type = 1;
+        }
+
+        if (white_bees > blue_bees && white_bees > red_bees) {
+            right_type = 1;
+        }
+
+        std::uniform_int_distribution<int> type_distibution(left_type, right_type);
         std::uniform_int_distribution<int> stats_distibution(1, 5);
 
         BeeColor bee_type = BeeColor::Red;

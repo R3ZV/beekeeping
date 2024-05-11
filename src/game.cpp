@@ -208,6 +208,7 @@ void Game::game_upgrades() {
     const int gap = 10;
     const int COLS = 2;
 
+    // upcasting
     std::vector<std::unique_ptr<Upgrade>> upgrades;
     upgrades.push_back(std::make_unique<CollectAmountUpgrade>(100,
                        player.get_total_upgrades(PlayerUpgrade::CollectAmount),
@@ -220,7 +221,10 @@ void Game::game_upgrades() {
                        assets->get_honey_per_pollen_upgrade_icon()));
     upgrades.push_back(std::make_unique<BeeUpgrade>(100,
                        player.get_total_upgrades(PlayerUpgrade::NewBee),
-                       assets->get_bee_egg_icon()));
+                       assets->get_bee_egg_icon(),
+                       player.get_total_bees_of_type(BeeColor::Red),
+                       player.get_total_bees_of_type(BeeColor::Blue),
+                       player.get_total_bees_of_type(BeeColor::White)));
 
     const int POS_X = WIDTH / 2 - CARD_WIDTH - POS_X_MARGIN / 2, POS_Y = 200;
     for (int i = 0; i < (int)upgrades.size(); ++i) {
@@ -234,6 +238,7 @@ void Game::game_upgrades() {
                  pos_y + gap,
                  20, BLACK);
 
+        // dynamic dispatch
         std::ostringstream oss;
         oss << upgrades[i]->get_price() << " H";
         DrawText(oss.str().c_str(),
