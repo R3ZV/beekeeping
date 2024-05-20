@@ -5,7 +5,6 @@
 #include <raylib.h>
 
 class AssetManager {
-    int loaded_assets;
     Texture2D background;
     Texture2D strawberry_icon;
     Texture2D strawberry_field;
@@ -34,9 +33,10 @@ class AssetManager {
     Sound collect_sound;
     Sound egg_hatch_sound;
     Sound purchase_sound;
+
+    void load_texture(Texture2D& texture, std::string path);
 public:
     AssetManager();
-    ~AssetManager();
     Texture2D get_background() const;
     Texture2D get_strawberry_icon() const;
     Texture2D get_strawberry_field() const;

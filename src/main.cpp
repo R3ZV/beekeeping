@@ -17,29 +17,25 @@ int main() {
 
     InitWindow(WIDTH, HEIGHT, "Bee Keeping");
     InitAudioDevice();
+    std::shared_ptr<AssetManager> assets = std::make_shared<AssetManager>();
+    Game game = Game(MainMenu, *player, assets, {});
 
-    {
-        auto assets = std::make_shared<AssetManager>();
-        Game game = Game(MainMenu, *player, assets, {});
-
-        bool is_playing = false;
-        double start_timer;
-        while (!WindowShouldClose()) {
-            if (!is_playing) {
-                start_timer = GetTime();
-                PlaySound(assets->get_ambient());
-                SetSoundVolume(assets->get_ambient(), 0.2);
-                is_playing = true;
-            }
-            if (GetTime() - start_timer > 74) {
-                is_playing = false;
-            }
-            BeginDrawing();
-            game.draw_state();
-            EndDrawing();
+    bool is_playing = false;
+    double start_timer;
+    while (!WindowShouldClose()) {
+        if (!is_playing) {
+            start_timer = GetTime();
+            PlaySound(assets->get_ambient());
+            SetSoundVolume(assets->get_ambient(), 0.2);
+            is_playing = true;
         }
+        if (GetTime() - start_timer > 74) {
+            is_playing = false;
+        }
+        BeginDrawing();
+        game.draw_state();
+        EndDrawing();
     }
-    Bee::display_created();
 
     CloseWindow();
 }

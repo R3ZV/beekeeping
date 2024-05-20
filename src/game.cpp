@@ -208,23 +208,22 @@ void Game::game_upgrades() {
     const int gap = 10;
     const int COLS = 2;
 
-    // upcasting
-    std::vector<std::unique_ptr<Upgrade>> upgrades;
-    upgrades.push_back(std::make_unique<CollectAmountUpgrade>(100,
-                       player.get_total_upgrades(PlayerUpgrade::CollectAmount),
-                       assets->get_collect_amount_upgrade_icon()));
-    upgrades.push_back(std::make_unique<BackpackUpgrade>(100,
-                       player.get_total_upgrades(PlayerUpgrade::BackpackCapacity),
-                       assets->get_backpack_upgrade_icon()));
-    upgrades.push_back(std::make_unique<HoneyPerPollenUpgrade>(100,
-                       player.get_total_upgrades(PlayerUpgrade::HoneyPerPollen),
-                       assets->get_honey_per_pollen_upgrade_icon()));
-    upgrades.push_back(std::make_unique<BeeUpgrade>(100,
-                       player.get_total_upgrades(PlayerUpgrade::NewBee),
-                       assets->get_bee_egg_icon(),
-                       player.get_total_bees_of_type(BeeColor::Red),
-                       player.get_total_bees_of_type(BeeColor::Blue),
-                       player.get_total_bees_of_type(BeeColor::White)));
+    std::array<std::unique_ptr<Upgrade>, 4> upgrades;
+    upgrades[0] = std::make_unique<CollectAmountUpgrade>(100,
+                  player.get_total_upgrades(PlayerUpgrade::CollectAmount),
+                  assets->get_collect_amount_upgrade_icon());
+    upgrades[1] = std::make_unique<BackpackUpgrade>(100,
+                  player.get_total_upgrades(PlayerUpgrade::BackpackCapacity),
+                  assets->get_backpack_upgrade_icon());
+    upgrades[2] = std::make_unique<HoneyPerPollenUpgrade>(100,
+                  player.get_total_upgrades(PlayerUpgrade::HoneyPerPollen),
+                  assets->get_honey_per_pollen_upgrade_icon());
+    upgrades[3] = std::make_unique<BeeUpgrade>(100,
+                  player.get_total_upgrades(PlayerUpgrade::NewBee),
+                  assets->get_bee_egg_icon(),
+                  player.get_total_bees_of_type(BeeColor::Red),
+                  player.get_total_bees_of_type(BeeColor::Blue),
+                  player.get_total_bees_of_type(BeeColor::White));
 
     const int POS_X = WIDTH / 2 - CARD_WIDTH - POS_X_MARGIN / 2, POS_Y = 200;
     for (int i = 0; i < (int)upgrades.size(); ++i) {
