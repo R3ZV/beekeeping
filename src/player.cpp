@@ -269,9 +269,9 @@ short int Player::get_total_upgrades(PlayerUpgrade upgrade_type) {
 
 int Player::calculate_honey_per_pollen() {
     int h_per_pollen = honey_per_pollen + honey_per_pollen_upgrades;
-    for (Bee bee : bees) {
+    std::for_each(bees.begin(), bees.end(), [&](Bee& bee) {
         h_per_pollen += bee.get_honey_per_pollen();
-    }
+    });
     return h_per_pollen;
 }
 
