@@ -13,21 +13,13 @@ you can get more bees and upgrade your backpack and your pollen collector.
 # TODOs
 ## Design patterns
 - [ ] 3 different OOP design patterns
-    * [ ] Singleton
+    * [x] Singleton
     * [x] Template method
     * [ ] ???
 
 
 ## Generic programming
 - [ ] 1 generic class
-- [ ] Create 1 generic function (or method, the class doesn't have to be generic)
-    and call it (the generic type T can be used as a return type as well)
-
-## STD
-- [x] Use 2 functions from STD (not methods) e.g. all_of/any_of/none_of, somethig
-- [x] Make use of 2 different types of containers (change some vecs into array
-where you don't need the container to be growable)
-- [x] Use 2 different types of smart pointers
 
 # Functionality
 - Reads the player stats from JSON file

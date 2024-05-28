@@ -18,7 +18,7 @@ int main() {
     InitWindow(WIDTH, HEIGHT, "Bee Keeping");
     InitAudioDevice();
     std::shared_ptr<AssetManager> assets = std::make_shared<AssetManager>();
-    Game game = Game(MainMenu, *player, assets, {});
+    std::unique_ptr<Game> game(Game::get_instance(MainMenu, *player, assets, {}));
 
     bool is_playing = false;
     double start_timer;
@@ -33,7 +33,7 @@ int main() {
             is_playing = false;
         }
         BeginDrawing();
-        game.draw_state();
+        game->draw_state();
         EndDrawing();
     }
 

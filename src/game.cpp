@@ -1,16 +1,39 @@
 #include "game.h"
 
+Game* Game::instance = nullptr;
+Game* Game::get_instance(
+    GameState state,
+    Player player,
+    std::shared_ptr<AssetManager> textures,
+    std::vector<GameAction> actions
+) {
+    if (instance == nullptr) {
+        instance = new Game(state, player, textures, actions);
+    }
+    return instance;
+}
+
 Game::Game(
     GameState state,
-    Player instance,
+    Player player,
     std::shared_ptr<AssetManager> textures,
     std::vector<GameAction> actions
 ) :
     state(state),
-    player(instance),
+    player(player),
     assets(textures),
     actions(actions)
 {}
+
+template<class T> void vec_dbg(const std::vector<T>& vec, const std::string name) {
+    std::cout << "====== " << name << " Debug ======" << std::endl;
+    std::cout << "Container entries: " << std::endl;
+    for (size_t i = 0; i < vec.size(); ++i) {
+        std::cout << "Element " << i << " has following properties: " << std::endl;
+        std::cout << vec[i] << std::endl;
+    }
+    std::cout << "====== " << name << " Debug ======" << std::endl;
+}
 
 void Game::game_main_menu() {
     ClearBackground(RAYWHITE);
@@ -42,6 +65,7 @@ void Game::game_lobby() {
     buttons.push_back("[S]tats");
     buttons.push_back("Sell [H]oney");
     buttons.push_back(state == GameState::FieldSelection ? "[B]ack" : "[F]ields");
+    vec_dbg(buttons, "Buttons");
 
     const int AVERAGE_LETTERS = 10, GAP = 50;
     for (int i = 0; i < (int)buttons.size(); ++i) {
@@ -136,8 +160,8 @@ void Game::game_field() {
         }
     }
 
-    // bees
     std::vector<Bee> bees = player.get_bees();
+    vec_dbg(bees, "Bees");
     const int GAP = 20;
     const int SPRITE_WIDTH = 64;
     const int SPRITE_HEIGHT = 88;

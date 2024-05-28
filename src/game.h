@@ -31,11 +31,22 @@ enum GameState {
     Stats,
 };
 
+// This class uses the Singleton design pattern
+// to make sure that at all time there is only one
+// instance of the game
 class Game {
+    static Game* instance;
     GameState state;
     Player player;
     std::shared_ptr<AssetManager> assets;
     std::vector<GameAction> actions;
+
+    Game(
+        GameState state,
+        Player instance,
+        std::shared_ptr<AssetManager> textures,
+        std::vector<GameAction> actions
+    );
 
     void game_main_menu();
     void game_lobby();
@@ -44,13 +55,14 @@ class Game {
     void game_stats();
 
 public:
-    Game(
+    Game(Game &other) = delete;
+    void operator=(const Game&) = delete;
+    static Game* get_instance(
         GameState state,
         Player instance,
         std::shared_ptr<AssetManager> textures,
         std::vector<GameAction> actions
     );
-
     void draw_state();
 };
 
